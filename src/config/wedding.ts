@@ -28,10 +28,16 @@ export interface Person {
 }
 
 export interface ScheduleItem {
-  time: string;
+  time: Bi;
   title: Bi;
-  description: Bi;
-  template?: boolean;
+  /** Optional short line under the title. */
+  description?: Bi;
+}
+
+export interface ScheduleDay {
+  /** Heading above the day's rites, e.g. ថ្ងៃព្រហស្បតិ៍ ទី៧ ខែមករា ឆ្នាំ២០២៧. */
+  date: Bi;
+  items: ScheduleItem[];
 }
 
 export const wedding = {
@@ -68,17 +74,17 @@ export const wedding = {
   },
 
   parents: {
-    // English spellings of the parents' names were not supplied: fill them in, or leave them
-    // bracketed and the English line shows as a placeholder.
+    // English spellings: common romanisations of the Khmer names (2026-11-23). If a parent
+    // writes their name differently (ID card, passport), use that spelling.
     groom: {
       label: { km: 'មាតាបិតាខាងកូនកំលោះ', en: 'Parents of the Groom' } as Bi,
-      father: { km: 'លោក ជ្រុន ជ្រឿន', en: 'Mr. [Father’s name in English]' } as Bi,
-      mother: { km: 'លោកស្រី អ៊ុល សុខជា', en: 'Mrs. [Mother’s name in English]' } as Bi,
+      father: { km: 'លោក ជ្រុន ជ្រឿន', en: 'Mr. Chrun Chroeun' } as Bi,
+      mother: { km: 'លោកស្រី អ៊ុល សុខជា', en: 'Mrs. Oul Sokchea' } as Bi,
     },
     bride: {
       label: { km: 'មាតាបិតាខាងកូនក្រមុំ', en: 'Parents of the Bride' } as Bi,
-      father: { km: 'លោក ភោគ សារុន', en: 'Mr. [Father’s name in English]' } as Bi,
-      mother: { km: 'លោកស្រី វ៉ង់ គីមស្រ៊ុន', en: 'Mrs. [Mother’s name in English]' } as Bi,
+      father: { km: 'លោក ភោគ សារុន', en: 'Mr. Phok Sarun' } as Bi,
+      mother: { km: 'លោកស្រី វ៉ង់ គីមស្រ៊ុន', en: 'Mrs. Vong Kimsrun' } as Bi,
     },
   },
 
@@ -93,17 +99,20 @@ export const wedding = {
 
   event: {
     /**
-     * ISO date-time with offset (Cambodia is +07:00). The date (Friday 8 January 2027)
-     * is confirmed. The 07:00 start / 21:00 end are PLACEHOLDER times: set the real
-     * times, then set `timeIsPlaceholder: false`. The countdown and calendar use these.
+     * ISO date-time with offset (Cambodia is +07:00). The guests' event is the wedding
+     * reception (ពិធីជប់លៀង): Friday 8 January 2027 at 16:00, as in the programme.
+     * The Details card, the countdown and "add to calendar" all use these. `end` (21:00)
+     * is an estimate, used only for the calendar entry.
      */
-    start: '2027-01-08T07:00:00+07:00',
+    /** What the date and time on the Details card refer to. */
+    label: { km: 'ពិធីជប់លៀងអាពាហ៍ពិពាហ៍', en: 'Wedding Reception' } as Bi,
+    start: '2027-01-08T16:00:00+07:00',
     end: '2027-01-08T21:00:00+07:00',
     dateIsPlaceholder: false,
-    timeIsPlaceholder: true,
+    timeIsPlaceholder: false,
     timeZone: 'Asia/Phnom_Penh',
     venue: {
-      name: { km: '[ឈ្មោះទីកន្លែង]', en: '[Venue name]' } as Bi,
+      name: { km: 'គេហដ្ឋានខាងកូនក្រមុំ', en: 'The Bride’s Family Home' } as Bi,
       address: {
         km: 'ភូមិបែកចាន ឃុំអណ្តូងពោធិ៍ ស្រុកតាំងគោក ខេត្តកំពង់ធំ',
         en: 'Baek Chan Village, Andoung Pou Commune, Taing Kouk District, Kampong Thom',
@@ -115,54 +124,32 @@ export const wedding = {
       km: 'សូមអញ្ជើញស្លៀកពាក់ពណ៌បៃតងអូលីវ',
       en: 'Please wear olive green',
     } as Bi,
-    notes: [
-      { km: '[ព័ត៌មានសំខាន់ — ឧ. ចំណតរថយន្ត]', en: '[Important information, e.g. parking]' },
-      { km: '[ព័ត៌មានសំខាន់ — ឧ. ពេលវេលាមកដល់]', en: '[Important information, e.g. arrival time]' },
-    ] as Bi[],
   },
 
   /**
-   * Traditional Khmer wedding rites in a common order. Times are placeholders.
-   * Remove, reorder or rename items to match the families' programme.
+   * Ceremony programme, as given by the families (2026-11-23). Two days: the
+   * monks' blessing and ខាន់ស្លា the afternoon before, the rites on the wedding day.
+   * Each item may also take a `description: { km, en }`.
    */
   schedule: [
     {
-      time: '[ម៉ោង]',
-      template: true,
-      title: { km: 'ពិធីហែជំនូន', en: 'Procession of Gifts' },
-      description: { km: '[ការពិពណ៌នា]', en: '[Short description]' },
+      date: { km: 'ថ្ងៃព្រហស្បតិ៍ ទី៧ ខែមករា ឆ្នាំ២០២៧', en: 'Thursday 7 January 2027' },
+      items: [
+        { time: { km: 'ម៉ោង ២:០០ រសៀល', en: '2:00 PM' }, title: { km: 'ពិធីសូត្រមន្តចម្រើនព្រះបរិត្ត', en: 'Monks’ Blessing' } },
+        { time: { km: 'ម៉ោង ៥:០០ ល្ងាច', en: '5:00 PM' }, title: { km: 'ពិធីកាត់ខាន់ស្លា', en: 'Khan Sla Ceremony' } },
+      ],
     },
     {
-      time: '[ម៉ោង]',
-      template: true,
-      title: { km: 'ពិធីសូត្រមន្តចម្រើនព្រះបរិត្ត', en: 'Monks’ Blessing' },
-      description: { km: '[ការពិពណ៌នា]', en: '[Short description]' },
+      date: { km: 'ថ្ងៃសុក្រ ទី៨ ខែមករា ឆ្នាំ២០២៧', en: 'Friday 8 January 2027' },
+      items: [
+        { time: { km: 'ម៉ោង ៧:០០ ព្រឹក', en: '7:00 AM' }, title: { km: 'ពិធីហែជំនូន និងរៀបរាប់ផ្លែឈើ', en: 'Procession of Gifts & Presenting the Fruit' } },
+        { time: { km: 'ម៉ោង ៩:០០ ព្រឹក', en: '9:00 AM' }, title: { km: 'ពិធីកាត់សក់បង្កក់សិរី', en: 'Hair-Cutting Ceremony' } },
+        { time: { km: 'ម៉ោង ១០:៣០ ព្រឹក', en: '10:30 AM' }, title: { km: 'ពិធីសំពះផ្ទឹម និងសែនចងដៃ', en: 'Sampeah Phtoem & Wrist-Tying Blessing' } },
+        { time: { km: 'ម៉ោង ១១:០០ ព្រឹក', en: '11:00 AM' }, title: { km: 'ពិធីបង្វិលពពិល', en: 'Circling of the Candle Flame' } },
+        { time: { km: 'ម៉ោង ៤:០០ រសៀល', en: '4:00 PM' }, title: { km: 'ពិធីជប់លៀងអាពាហ៍ពិពាហ៍', en: 'Wedding Reception' } },
+      ],
     },
-    {
-      time: '[ម៉ោង]',
-      template: true,
-      title: { km: 'ពិធីកាត់សក់បង្កក់សិរី', en: 'Hair-Cutting Ceremony' },
-      description: { km: '[ការពិពណ៌នា]', en: '[Short description]' },
-    },
-    {
-      time: '[ម៉ោង]',
-      template: true,
-      title: { km: 'ពិធីបង្វិលពពិល', en: 'Circling of the Candle Flame' },
-      description: { km: '[ការពិពណ៌នា]', en: '[Short description]' },
-    },
-    {
-      time: '[ម៉ោង]',
-      template: true,
-      title: { km: 'ពិធីសំពះផ្ទឹម និងចងដៃ', en: 'Joining & Wrist-Tying Blessing' },
-      description: { km: '[ការពិពណ៌នា]', en: '[Short description]' },
-    },
-    {
-      time: '[ម៉ោង]',
-      template: true,
-      title: { km: 'ពិធីជប់លៀងអាពាហ៍ពិពាហ៍', en: 'Wedding Reception' },
-      description: { km: '[ការពិពណ៌នា]', en: '[Short description]' },
-    },
-  ] as ScheduleItem[],
+  ] as ScheduleDay[],
 
   story: {
     /** Behind-the-scenes clips (keys from media.generated.ts). Play as silent loops. */

@@ -12,7 +12,7 @@ import { googleCalendarUrl, downloadIcs } from '../lib/calendar';
 import { mapsUrl } from '../lib/maps';
 import s from './Details.module.css';
 
-/** 03 · Wedding details: date, countdown, venue and map, dress code, notes. */
+/** 03 · Wedding details: date, countdown, venue and map, dress code, calendar. */
 export function Details() {
   const { event } = wedding;
   const date = formatEventDate();
@@ -43,7 +43,20 @@ export function Details() {
               {date.km}
             </span>
             <span className={s.time} data-placeholder={event.timeIsPlaceholder || undefined} title={event.timeIsPlaceholder ? 'Placeholder time: set event.start in src/config/wedding.ts' : undefined}>
-              {event.timeIsPlaceholder ? <span className="ph">[ម៉ោង · Time]</span> : date.time}
+              {event.timeIsPlaceholder ? (
+                <span className="ph">[ម៉ោង · Time]</span>
+              ) : (
+                <>
+                  <span lang="km" className={s.timeKm}>
+                    {event.label.km} · {date.timeKm}
+                  </span>
+                  {EN && (
+                    <span lang="en" className={s.timeEn}>
+                      {event.label.en} · {date.timeEn}
+                    </span>
+                  )}
+                </>
+              )}
             </span>
             {ph && <span className={s.phNote}>Date to be confirmed</span>}
           </Reveal>
@@ -81,21 +94,6 @@ export function Details() {
                 {EN && <span lang="en">Dress Code</span>}
               </h3>
               <Bi value={event.dressCode} kmClass={s.small} enClass={s.smallEn} />
-            </Reveal>
-
-            <Reveal className={s.card} i={2}>
-              <LotusRosette size={30} tone="light" />
-              <h3 className={s.cardTitle}>
-                <span lang="km">ព័ត៌មានសំខាន់</span>
-                {EN && <span lang="en">Good to Know</span>}
-              </h3>
-              <ul className={s.notes}>
-                {event.notes.map((n, i) => (
-                  <li key={i}>
-                    <Bi value={n} as="span" kmClass={s.small} enClass={s.smallEn} />
-                  </li>
-                ))}
-              </ul>
             </Reveal>
           </div>
 

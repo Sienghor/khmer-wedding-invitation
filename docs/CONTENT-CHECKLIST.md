@@ -23,10 +23,10 @@ Legend: ✅ filled · ✏️ yours to fill · 🔍 please review (template wordi
 
 | Field | Khmer | English | Status |
 |---|---|---|---|
-| Groom's father | លោក ជ្រុន ជ្រឿន | `Mr. [Father’s name in English]` | ✅ km · ✏️ en |
-| Groom's mother | លោកស្រី អ៊ុល សុខជា | `Mrs. [Mother’s name in English]` | ✅ km · ✏️ en |
-| Bride's father | លោក ភោគ សារុន | `Mr. [Father’s name in English]` | ✅ km · ✏️ en |
-| Bride's mother | លោកស្រី វ៉ង់ គីមស្រ៊ុន | `Mrs. [Mother’s name in English]` | ✅ km · ✏️ en |
+| Groom's father | លោក ជ្រុន ជ្រឿន | `Mr. Chrun Chroeun` | ✅ km · 🔍 en: check the spelling |
+| Groom's mother | លោកស្រី អ៊ុល សុខជា | `Mrs. Oul Sokchea` | ✅ km · 🔍 en: check the spelling |
+| Bride's father | លោក ភោគ សារុន | `Mr. Phok Sarun` | ✅ km · 🔍 en: check the spelling |
+| Bride's mother | លោកស្រី វ៉ង់ គីមស្រ៊ុន | `Mrs. Vong Kimsrun` | ✅ km · 🔍 en: check the spelling |
 
 English spellings weren't supplied, and romanising Khmer names has several valid spellings, so the family should choose them. Honorifics (លោក / លោកស្រី, Mr. / Mrs.) can be changed to ឯកឧត្តម, លោកជំទាវ, etc.
 
@@ -34,28 +34,34 @@ English spellings weren't supplied, and romanising Khmer names has several valid
 
 | Field | Current | Status |
 |---|---|---|
-| `start` | `2027-01-08T07:00:00+07:00` | ✅ date (Friday 8 January 2027) · ✏️ **time 07:00 is a placeholder**. Format: `YYYY-MM-DDTHH:MM:00+07:00` |
-| `end` | `2027-01-08T21:00:00+07:00` | ✏️ end time (used for calendar invites) |
+| `label` | ពិធីជប់លៀងអាពាហ៍ពិពាហ៍ · Wedding Reception | ✅ what the date and time on the Details card refer to |
+| `start` | `2027-01-08T16:00:00+07:00` | ✅ reception, Friday 8 January 2027 at 4:00 PM. Format: `YYYY-MM-DDTHH:MM:00+07:00` |
+| `end` | `2027-01-08T21:00:00+07:00` | 🔍 estimated end, used only for calendar invites |
 | `dateIsPlaceholder` | `false` | ✅ |
-| `timeIsPlaceholder` | `true` | ✏️ set to `false` once the real start time is in `start` (until then the page shows "[ម៉ោង · Time]" and the countdown counts to 07:00) |
-| `venue.name` | `[ឈ្មោះទីកន្លែង]` / `[Venue name]` | ✏️ |
+| `timeIsPlaceholder` | `false` | ✅ the Details card shows the reception: ពិធីជប់លៀងអាពាហ៍ពិពាហ៍ · ម៉ោង ៤:០០ រសៀល (`label`, `start` 16:00). `end` 21:00 is an estimate for the calendar entry |
+| `venue.name` | គេហដ្ឋានខាងកូនក្រមុំ / The Bride’s Family Home | ✅ |
 | `venue.address.km` | ភូមិបែកចាន ឃុំអណ្តូងពោធិ៍ ស្រុកតាំងគោក ខេត្តកំពង់ធំ | ✅ |
 | `venue.address.en` | Baek Chan Village, Andoung Pou Commune, Taing Kouk District, Kampong Thom | ✅ matches the Khmer |
 | `venue.maps` | `https://maps.app.goo.gl/GQHrGwEfK48T38uT6` | ✅ ("Directions" button) |
 | `dressCode` km / en | olive green | ✅ |
-| `notes` (2 items) km / en | placeholders (e.g. parking, arrival) | ✏️ add or remove items freely |
 
 The countdown, Khmer date (ថ្ងៃ… ទី… ខែ… ឆ្នាំ…), calendar links and .ics file all derive from `start` and `end`.
 
 ## 4. Programme: `wedding.schedule`
 
-Six traditional rites in a common order: ពិធីហែជំនូន, ពិធីសូត្រមន្តចម្រើនព្រះបរិត្ត, ពិធីកាត់សក់បង្កក់សិរី, ពិធីបង្វិលពពិល, ពិធីសំពះផ្ទឹម និងចងដៃ, ពិធីជប់លៀងអាពាហ៍ពិពាហ៍.
+✅ Filled from the families' programme (2026-11-23), grouped by day:
 
-| Per item | Status |
-|---|---|
-| `time` (e.g. `07:00`) | ✏️ ×6 |
-| `description` km / en | ✏️ ×6 (optional; can be short) |
-| `title` | 🔍 confirm names and order with the families; add, remove or reorder freely |
+| Day | Time | Rite |
+|---|---|---|
+| ថ្ងៃព្រហស្បតិ៍ ទី៧ ខែមករា ២០២៧ | ២:០០ រសៀល | ពិធីសូត្រមន្តចម្រើនព្រះបរិត្ត |
+| | ៥:០០ ល្ងាច | ពិធីកាត់ខាន់ស្លា |
+| ថ្ងៃសុក្រ ទី៨ ខែមករា ២០២៧ | ៧:០០ ព្រឹក | ពិធីហែជំនូន និងរៀបរាប់ផ្លែឈើ |
+| | ៩:០០ ព្រឹក | ពិធីកាត់សក់បង្កក់សិរី |
+| | ១០:៣០ ព្រឹក | ពិធីសំពះផ្ទឹម និងសែនចងដៃ |
+| | ១១:០០ ព្រឹក | ពិធីបង្វិលពពិល |
+| | ៤:០០ រសៀល | ពិធីជប់លៀងអាពាហ៍ពិពាហ៍ |
+
+Each item has `time` and `title` in Khmer and English. A short `description: { km, en }` can be added to any item (optional). 🔍 English titles are translations: check them if you like.
 
 ## 5. Photo album: `wedding.story`
 

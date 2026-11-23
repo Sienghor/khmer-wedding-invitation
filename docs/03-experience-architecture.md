@@ -7,7 +7,7 @@
 | 01 | Ceremonial opening | `sections/Opening.tsx` | charcoal | 3D or SVG doorway, names in the opening, personalised greeting, glass "Open" button |
 | n/a | Threshold (hero) | `sections/Hero.tsx` | ivory | Lintel above the couple portrait (parallax), names, date |
 | 02 | Formal invitation | `sections/Invitation.tsx` | ivory | Ceremonial frame: parents, formal message; bride and groom portraits |
-| 03 | Wedding details | `sections/Details.tsx` | burgundy | Date, glass countdown, venue and map, dress code, notes, calendar |
+| 03 | Wedding details | `sections/Details.tsx` | burgundy | Date, glass countdown, venue and map, dress code, calendar |
 | 04 | Photo album (កម្រងរូបភាព) | `sections/Story.tsx` | ivory | Masonry gallery and lightbox, behind-the-scenes clips. Story chapters removed (rev. 5). |
 | 05 | Ceremony programme | `sections/Schedule.tsx` | ivory | Rosette timeline with a scroll-grown spine |
 | 06 | Blessings (ផ្ញើពរជ័យ) | `sections/Blessings.tsx` | accent→charcoal | Glass blessing form with one-tap Khmer blessings, calendar, share. Replaced the RSVP form (rev. 4): Khmer weddings don't ask guests to confirm attendance. |
