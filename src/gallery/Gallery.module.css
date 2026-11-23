@@ -1,0 +1,38 @@
+/* Masonry by CSS columns: any mix of portrait, landscape and square composes without gaps. */
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  columns: 2;
+  column-gap: clamp(0.5rem, 0.3rem + 1vw, 1rem);
+}
+@media (min-width: 900px) {
+  .grid {
+    columns: 3;
+  }
+}
+.item {
+  break-inside: avoid;
+  margin-bottom: clamp(0.5rem, 0.3rem + 1vw, 1rem);
+}
+.tile {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  border-radius: var(--r-md);
+}
+.photo {
+  transition: transform var(--d-slow) var(--ease-ceremonial), box-shadow var(--d-slow) var(--ease-ceremonial);
+}
+@media (hover: hover) {
+  .tile:hover .photo {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-soft);
+  }
+}
+.tile:active .photo {
+  transform: scale(0.985);
+}

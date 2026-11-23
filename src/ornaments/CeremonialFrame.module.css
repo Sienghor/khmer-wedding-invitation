@@ -1,0 +1,82 @@
+.frame {
+  position: relative;
+  margin-top: clamp(6.5rem, 4rem + 8vw, 8.5rem);
+  padding: clamp(2.6rem, 2rem + 3vw, 4rem) clamp(2.6rem, 1.6rem + 3vw, 4.2rem) clamp(3rem, 2.4rem + 3vw, 4.4rem);
+  isolation: isolate;
+}
+
+.rule,
+.rule::after {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--c-line);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.rule::after {
+  content: '';
+  inset: 6px;
+  border-color: color-mix(in oklab, var(--c-gold) 22%, transparent);
+}
+
+.corner {
+  position: absolute;
+  width: 26px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: var(--frame-bg, var(--c-ivory));
+  padding: 0 2px;
+}
+
+/* Leaves point INTO each corner: rotate the upward leaf by the corner's bearing. */
+.tl { top: -14px; left: -10px; transform: rotate(-45deg); }
+.tr { top: -14px; right: -10px; transform: rotate(45deg); }
+.bl { bottom: -14px; left: -10px; transform: rotate(-135deg); }
+.br { bottom: -14px; right: -10px; transform: rotate(135deg); }
+
+.crown {
+  position: absolute;
+  top: 1px;
+  left: 50%;
+  width: clamp(130px, 34%, 190px);
+  translate: -50% -100%;
+  padding: 0 10px;
+}
+.crown::after {
+  /* Masks the frame rule under the fronton's base. */
+  content: '';
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: -8px;
+  height: 9px;
+  background: var(--frame-bg, var(--c-ivory));
+  z-index: -1;
+}
+.pilaster {
+  position: absolute;
+  top: 40px;
+  bottom: 44px;
+  width: 16px;
+  opacity: 0.75;
+}
+.pl {
+  left: 14px;
+}
+.pr {
+  right: 14px;
+}
+
+.content {
+  position: relative;
+}
+
+.base {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 12px;
+  opacity: 0.85;
+}

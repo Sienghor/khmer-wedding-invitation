@@ -1,0 +1,88 @@
+/*
+ * MOTION SYSTEM
+ * Entrances: opacity + transform only (GPU-composited, no layout shift).
+ * All timing comes from tokens in styles/tokens.css.
+ */
+[data-reveal] {
+  opacity: 0;
+  transition:
+    opacity var(--d-reveal) var(--ease-ceremonial),
+    transform var(--d-reveal) var(--ease-ceremonial),
+    filter var(--d-reveal) var(--ease-ceremonial);
+  transition-delay: calc(var(--i, 0) * var(--stagger) + var(--delay, 0ms));
+}
+
+[data-reveal='rise'] {
+  transform: translate3d(0, 28px, 0);
+}
+
+[data-reveal='scale'] {
+  transform: scale(0.965);
+}
+
+/* The clip goes on the child: IntersectionObserver measures the clipped area,
+   so a fully clipped target would never report itself as visible. */
+[data-reveal='unveil'] {
+  opacity: 1;
+}
+[data-reveal='unveil'] > * {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path var(--d-reveal) var(--ease-ceremonial);
+  transition-delay: calc(var(--i, 0) * var(--stagger) + var(--delay, 0ms));
+}
+[data-reveal='unveil'][data-inview] > * {
+  clip-path: inset(0);
+}
+
+[data-reveal='draw'] {
+  opacity: 1;
+}
+
+[data-reveal][data-inview] {
+  opacity: 1;
+  transform: none;
+}
+
+/* SVG stroke drawing: paths opt in with pathLength="1" and class="draw-path". */
+[data-reveal] .draw-path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset var(--d-draw) var(--ease-silk);
+  transition-delay: calc(var(--i, 0) * var(--stagger) + var(--delay, 0ms) + 200ms);
+}
+
+[data-reveal][data-inview] .draw-path {
+  stroke-dashoffset: 0;
+}
+
+/* Layered parallax via scroll-driven animations: zero JavaScript, off the main thread. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .parallax {
+      animation: parallax-drift linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+  }
+}
+
+@keyframes parallax-drift {
+  from {
+    transform: translate3d(0, var(--depth, 40px), 0);
+  }
+  to {
+    transform: translate3d(0, calc(var(--depth, 40px) * -1), 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal='unveil'] > * {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+  [data-reveal] .draw-path {
+    stroke-dashoffset: 0;
+  }
+}

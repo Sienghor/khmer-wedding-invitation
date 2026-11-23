@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Cloudflare Worker: serves dist/ and the blessings API (worker/index.ts).
+  // Live at https://sienghor-saing.sienghor.workers.dev
+  "name": "sienghor-saing",
+  "account_id": "a69a80d7fbb8f3b37beecf3e3ed7d9fa",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    // The Worker only runs for these paths; everything else is served straight from the static assets.
+    "run_worker_first": ["/api/*", "/admin", "/admin/"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "wedding-blessings",
+      "database_id": "2f20b275-38b9-4ff2-b1e3-a80957a0711a",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "observability": { "enabled": true }
+  // Custom domain: added once the domain is known, e.g.
+  // "routes": [{ "pattern": "example.com", "custom_domain": true }]
+}

@@ -1,0 +1,147 @@
+.section {
+  position: relative;
+  overflow: hidden;
+  color: var(--c-ivory);
+  background:
+    radial-gradient(80% 45% at 50% 78%, rgb(213 183 122 / 0.28), transparent 70%),
+    linear-gradient(180deg, var(--c-night) 0%, color-mix(in oklab, var(--c-night) 85%, var(--c-accent)) 55%, color-mix(in oklab, var(--c-night) 70%, var(--c-accent)) 100%);
+  padding: var(--s-9) var(--gutter) var(--s-6);
+  text-align: center;
+}
+.text {
+  max-width: 36rem;
+  margin: 0 auto;
+  display: grid;
+  justify-items: center;
+  gap: var(--s-5);
+}
+.bayon {
+  width: clamp(140px, 36vw, 200px);
+  filter: drop-shadow(0 0 40px rgb(213 183 122 / 0.22));
+}
+.heading {
+  display: grid;
+  font-weight: 400;
+}
+.heading [lang='km'] {
+  font-size: var(--t-2xl);
+  color: var(--c-gold-light);
+  line-height: 1.8;
+}
+.heading [lang='en'] {
+  font-family: var(--f-latin);
+  font-style: italic;
+  font-size: var(--t-xl);
+  color: var(--c-champagne);
+}
+.message {
+  display: grid;
+  gap: var(--s-2);
+  font-size: var(--t-md);
+}
+.messageEn {
+  font-family: var(--f-latin);
+  font-size: var(--t-lg);
+  font-style: italic;
+  opacity: 0.85;
+}
+.signature {
+  display: grid;
+}
+.signature [lang='km'] {
+  font-family: var(--f-km-display);
+  color: var(--c-gold-light);
+}
+.signature [lang='en'] {
+  font-family: var(--f-latin);
+  font-size: var(--t-xl);
+  font-style: italic;
+}
+.scene {
+  position: relative;
+  max-width: 1100px;
+  margin: var(--s-8) auto 0;
+}
+.towers :global(.tq-tower) {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.scene[data-inview] .towers :global(.tq-tower) {
+  animation: rise 1.8s var(--ease-ceremonial) both;
+  animation-delay: calc(var(--i) * 180ms + 200ms);
+}
+.scene[data-inview] .towers :global(.tq-glow) {
+  animation: dawn 3.2s var(--ease-silk) both;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14%) scaleY(0.92);
+  }
+}
+@keyframes dawn {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene[data-inview] .towers :global(.tq-tower),
+  .scene[data-inview] .towers :global(.tq-glow) {
+    animation: none;
+  }
+}
+.temple {
+  aspect-ratio: 4 / 5;
+  display: grid;
+}
+@media (min-width: 700px) {
+  .temple {
+    aspect-ratio: 16 / 9;
+  }
+}
+.temple canvas {
+  /* Dissolve the scene's edges into the dusk of the page. */
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 52%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 52%, transparent 100%);
+}
+.temple > :first-child {
+  display: grid;
+  align-content: end;
+}
+.svgScene {
+  width: 100%;
+}
+.causeway {
+  margin-top: -4%;
+  position: relative;
+}
+.base {
+  margin-top: var(--s-2);
+  opacity: 0.6;
+}
+.footer {
+  margin-top: var(--s-8);
+  display: grid;
+  justify-items: center;
+  gap: var(--s-3);
+  padding-bottom: calc(var(--s-8) + env(safe-area-inset-bottom));
+}
+.replay {
+  min-height: 44px;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid rgb(213 183 122 / 0.45);
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--c-ivory);
+  font-family: var(--f-latin);
+  font-size: var(--t-md);
+  cursor: pointer;
+  transition: background var(--d-quick) var(--ease-silk);
+}
+.replay [lang='km'] {
+  font-family: var(--f-km-body);
+  font-size: var(--t-sm);
+}
+.replay:hover {
+  background: rgb(213 183 122 / 0.15);
+}

@@ -1,0 +1,38 @@
+.film {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r-md);
+  background: var(--c-charcoal);
+  box-shadow: var(--shadow-soft);
+}
+.film::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgb(255 255 255 / 0.45);
+  border-radius: calc(var(--r-md) - 6px);
+  pointer-events: none;
+}
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: 64px;
+  height: 64px;
+  border: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  padding-left: 4px;
+  color: var(--c-ivory);
+  background: color-mix(in oklab, var(--c-accent) 85%, transparent);
+  box-shadow: 0 0 0 1px rgb(213 183 122 / 0.6), 0 0 0 8px rgb(213 183 122 / 0.15);
+  cursor: pointer;
+}

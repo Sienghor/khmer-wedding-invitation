@@ -1,0 +1,90 @@
+/*
+ * DESIGN TOKENS
+ * Palette defaults mirror src/config/theme.ts (applyTheme() overrides them at
+ * start-up, so the config file is the single place to change colours).
+ */
+:root {
+  --c-ivory: #f6f0e5;
+  --c-champagne: #d5b77a;
+  --c-gold: #a77b42;
+  --c-accent: #632e32;
+  --c-night: #1b1714;
+  --c-charcoal: #24201c;
+  --c-sandstone: #b48474;
+
+  /* Derived tones */
+  --c-ivory-2: color-mix(in oklab, var(--c-ivory) 88%, var(--c-champagne));
+  --c-ivory-3: color-mix(in oklab, var(--c-ivory) 70%, var(--c-champagne));
+  --c-ink: var(--c-charcoal);
+  --c-ink-soft: color-mix(in oklab, var(--c-charcoal) 72%, var(--c-ivory));
+  --c-ink-faint: color-mix(in oklab, var(--c-charcoal) 45%, var(--c-ivory));
+  --c-gold-deep: color-mix(in oklab, var(--c-gold) 78%, var(--c-charcoal));
+  --c-gold-light: color-mix(in oklab, var(--c-champagne) 70%, white);
+  --c-accent-deep: color-mix(in oklab, var(--c-accent) 72%, black);
+  --c-line: color-mix(in oklab, var(--c-gold) 38%, transparent);
+  /* Gold for small text on ivory: antique gold alone is 3.3:1; this is ≥ 4.5:1 (WCAG AA). */
+  --c-gold-ink: color-mix(in oklab, var(--c-gold) 66%, var(--c-charcoal));
+
+  /* Typography */
+  --f-km-display: 'Moul', 'Battambang', serif;
+  --f-km-body: 'Battambang', 'Kantumruy Pro', sans-serif;
+  --f-latin: 'Cormorant Garamond', 'Times New Roman', serif;
+  --f-ui: 'Kantumruy Pro', system-ui, sans-serif;
+
+  /* Fluid type scale (mobile → desktop) */
+  --t-xs: clamp(0.72rem, 0.68rem + 0.15vw, 0.8rem);
+  --t-sm: clamp(0.86rem, 0.82rem + 0.2vw, 0.95rem);
+  --t-md: clamp(1rem, 0.95rem + 0.25vw, 1.12rem);
+  --t-lg: clamp(1.2rem, 1.1rem + 0.5vw, 1.45rem);
+  --t-xl: clamp(1.55rem, 1.3rem + 1.1vw, 2.2rem);
+  --t-2xl: clamp(2rem, 1.6rem + 2vw, 3.3rem);
+  --t-3xl: clamp(2.5rem, 1.8rem + 3.4vw, 4.8rem);
+
+  /* Space */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4.5rem;
+  --s-9: clamp(4.5rem, 3rem + 6vw, 8rem);
+  --gutter: clamp(1rem, 0.6rem + 2.4vw, 2.5rem);
+  --measure: 34rem;
+
+  /* Radii & elevation */
+  --r-sm: 6px;
+  --r-md: 14px;
+  --r-lg: 26px;
+  --r-pill: 999px;
+  --shadow-soft: 0 1px 2px rgb(36 32 28 / 0.06), 0 8px 28px -12px rgb(36 32 28 / 0.22);
+  --shadow-deep: 0 2px 6px rgb(0 0 0 / 0.16), 0 24px 60px -24px rgb(0 0 0 / 0.5);
+
+  /*
+   * MOTION LANGUAGE ("ceremonial")
+   * One family of curves. Entrances decelerate long, like a bow; nothing bounces.
+   */
+  --ease-ceremonial: cubic-bezier(0.22, 1, 0.36, 1); /* entrances */
+  --ease-silk: cubic-bezier(0.65, 0, 0.35, 1); /* state changes, crossfades */
+  --ease-exit: cubic-bezier(0.55, 0, 1, 0.45); /* departures (short) */
+  --d-quick: 220ms;
+  --d-base: 520ms;
+  --d-slow: 900ms;
+  --d-reveal: 1100ms;
+  --d-draw: 1800ms;
+  --stagger: 90ms;
+
+  color-scheme: light;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --d-quick: 1ms;
+    --d-base: 1ms;
+    --d-slow: 1ms;
+    --d-reveal: 1ms;
+    --d-draw: 1ms;
+    --stagger: 0ms;
+  }
+}

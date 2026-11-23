@@ -1,0 +1,45 @@
+.section {
+  position: relative;
+  isolation: isolate;
+  padding: var(--s-9) var(--gutter);
+  max-width: 1120px;
+  margin: 0 auto;
+}
+.galleryTitle {
+  font-size: var(--t-lg);
+  color: var(--c-accent);
+}
+.filmsHead {
+  margin: var(--s-9) 0 var(--s-6);
+  text-align: center;
+}
+.films {
+  display: grid;
+  grid-template-columns: var(--film-cols-narrow, 1fr);
+  gap: var(--s-5) var(--s-4);
+  align-items: start;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.filmItem[data-wide] {
+  grid-column: 1 / -1;
+}
+@media (min-width: 760px) {
+  .films {
+    grid-template-columns: var(--film-cols, 1fr);
+    gap: var(--s-5);
+  }
+  .filmItem[data-wide] {
+    grid-column: auto;
+  }
+}
+.filmItem {
+  margin: 0;
+}
+.caption {
+  margin-top: var(--s-3);
+  text-align: center;
+  font-family: var(--f-latin);
+  font-style: italic;
+  color: var(--c-ink);
+}

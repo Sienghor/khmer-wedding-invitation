@@ -1,0 +1,13 @@
+node_modules
+dist
+qa-output
+.DS_Store
+.wrangler
+.dev.vars
+# Database exports contain guests' names and messages
+backups
+# Original photos, videos and music stay on this computer only (full resolution,
+# location data). The web-ready copies in public/media are committed.
+src/image
+src/video
+src/music

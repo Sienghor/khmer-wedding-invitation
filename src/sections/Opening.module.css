@@ -1,0 +1,347 @@
+/*
+ * 01 · CEREMONIAL OPENING
+ * Layout: title / doorway frame / greeting + button. The doorway frame keeps
+ * the 3D scene's aspect ratio; the Three.js camera fits itself to this box, so
+ * HTML text sits exactly inside the 3D opening.
+ */
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+  color: var(--c-ivory);
+  background: var(--c-night);
+}
+
+/* Background light rises first: dusk to lamplight behind the doorway. */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(42% 34% at 50% 54%, rgb(213 183 122 / 0.42), transparent 72%),
+    radial-gradient(70% 55% at 50% 58%, color-mix(in oklab, var(--c-accent) 75%, transparent), transparent 78%),
+    radial-gradient(120% 80% at 50% 0%, color-mix(in oklab, var(--c-night) 82%, var(--c-gold)), color-mix(in oklab, var(--c-night) 85%, black) 70%);
+  animation: lamp 2.2s var(--ease-silk) both;
+}
+@keyframes lamp {
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.layout {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  padding: max(env(safe-area-inset-top), clamp(0.75rem, 2vh, 1.75rem)) var(--gutter) max(env(safe-area-inset-bottom), clamp(1rem, 3vh, 2.25rem));
+  pointer-events: none;
+}
+
+.top {
+  text-align: center;
+  animation: appear 1.4s var(--ease-ceremonial) 0.4s both;
+}
+.title {
+  display: grid;
+  font-weight: 400;
+}
+.title [lang='km'] {
+  font-size: clamp(1.05rem, 0.8rem + 1.6vw, 1.6rem);
+  line-height: 2;
+  background: linear-gradient(180deg, var(--c-gold-light), var(--c-champagne) 60%, var(--c-gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.titleEn {
+  font-family: var(--f-latin);
+  font-size: var(--t-xs);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-champagne);
+  opacity: 0.85;
+}
+
+.stage {
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  container-type: size;
+  padding: clamp(0.25rem, 1.5vh, 1rem) 0;
+}
+.frame {
+  position: relative;
+  max-width: 100cqw;
+}
+
+/* SVG fallback doorway: same parts, assembled with CSS. */
+.svgDoor {
+  position: absolute;
+  inset: 0;
+}
+.svgLintel {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: grid;
+  align-items: end;
+  padding: 2% 1%;
+  border-radius: 3px;
+  background: linear-gradient(180deg, color-mix(in oklab, var(--c-sandstone) 85%, white), var(--c-sandstone) 45%, color-mix(in oklab, var(--c-sandstone) 70%, black));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), 0 18px 30px -18px rgb(0 0 0 / 0.8);
+  animation: settle 1.6s var(--ease-ceremonial) 1s both;
+}
+.svgPediment {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  z-index: 0;
+  animation: settle 1.6s var(--ease-ceremonial) 1.4s both;
+}
+.svgColumn {
+  position: absolute;
+  animation: rise 1.7s var(--ease-ceremonial) 0.2s both;
+}
+.svgColumn[data-side='right'] {
+  animation-delay: 0.32s;
+}
+.svgThreshold {
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  bottom: 0;
+  background: color-mix(in oklab, var(--c-sandstone) 55%, black);
+  border-radius: 2px;
+  animation: appear 1s var(--ease-ceremonial) 0.1s both;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18%);
+  }
+}
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(-30%) rotateX(14deg);
+  }
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* Text inside the doorway opening */
+.opening {
+  position: absolute;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+  gap: clamp(0.4rem, 1.4vh, 1rem);
+  padding: 6% 2%;
+  container-type: inline-size;
+}
+.names {
+  display: grid;
+  justify-items: center;
+  gap: 0.1rem;
+}
+.nameEn {
+  font-family: var(--f-latin);
+  font-style: italic;
+  font-weight: 400;
+  /* Sized to the opening so a name stays on one line however narrow the doorway. */
+  font-size: min(clamp(1.45rem, 1rem + 2.6vw, 2.6rem), 13.5cqi);
+  white-space: nowrap;
+  line-height: 1.1;
+  color: var(--c-ivory);
+  text-shadow: 0 2px 18px rgb(0 0 0 / 0.55);
+}
+.nameKm {
+  font-size: min(clamp(0.8rem, 0.65rem + 0.8vw, 1.1rem), 7.5cqi);
+  line-height: 2;
+  color: var(--c-gold-light);
+  text-shadow: 0 2px 12px rgb(0 0 0 / 0.6);
+}
+.amp {
+  margin: clamp(0.1rem, 1vh, 0.6rem) 0;
+}
+.date {
+  font-family: var(--f-latin);
+  font-size: var(--t-sm);
+  letter-spacing: 0.32em;
+  color: var(--c-champagne);
+}
+.date[data-placeholder] {
+  text-decoration: underline dashed rgb(213 183 122 / 0.45);
+  text-underline-offset: 0.35em;
+}
+
+.names > *,
+.date {
+  opacity: 0;
+  transform: translateY(12px);
+  filter: blur(6px);
+  transition:
+    opacity 1.2s var(--ease-ceremonial),
+    transform 1.2s var(--ease-ceremonial),
+    filter 1.2s var(--ease-ceremonial);
+}
+.names > :nth-child(2) { transition-delay: 120ms; }
+.names > :nth-child(3) { transition-delay: 260ms; }
+.names > :nth-child(5) { transition-delay: 380ms; }
+.names > :nth-child(6) { transition-delay: 500ms; }
+.date { transition-delay: 700ms; }
+
+.gate:not([data-phase='assembling']) .names > *,
+.gate:not([data-phase='assembling']) .date {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Greeting + call to action */
+.bottom {
+  display: grid;
+  justify-items: center;
+  gap: clamp(0.6rem, 1.8vh, 1.1rem);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 1s var(--ease-ceremonial),
+    transform 1s var(--ease-ceremonial);
+}
+.gate[data-phase='ready'] .bottom {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.greeting {
+  display: grid;
+  line-height: 1.6;
+}
+.greeting [lang='km']:first-child {
+  font-size: var(--t-sm);
+  color: var(--c-champagne);
+}
+.guest {
+  font-family: var(--f-latin);
+  font-size: var(--t-xl);
+  font-style: italic;
+  color: var(--c-ivory);
+}
+.guest:lang(km) {
+  font-family: var(--f-km-display);
+  font-style: normal;
+  font-size: var(--t-md);
+}
+.guestEn {
+  font-family: var(--f-latin);
+  font-size: var(--t-xs);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.openBtn {
+  display: grid;
+  justify-items: center;
+  min-width: 220px;
+  min-height: 56px;
+  padding: 0.55rem 2rem;
+  border: 0;
+  border-radius: var(--r-pill);
+  color: var(--c-ivory);
+  cursor: pointer;
+  transition: transform var(--d-quick) var(--ease-silk);
+}
+.openBtn [lang='km'] {
+  font-family: var(--f-km-display);
+  font-size: var(--t-sm);
+  line-height: 1.8;
+  color: var(--c-gold-light);
+}
+.openEn {
+  font-family: var(--f-latin);
+  font-size: 0.7rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+.openBtn:hover {
+  transform: translateY(-1px);
+}
+.openBtn:active {
+  transform: scale(0.98);
+}
+/* A slow halo invites the tap without bouncing. */
+.openBtn::after {
+  animation: halo 3.2s var(--ease-silk) 1s infinite;
+}
+@keyframes halo {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* Leaving: text dissolves, camera passes through, ivory light floods in. */
+.wash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 50% at 50% 52%, #fffaf0, var(--c-ivory));
+  opacity: 0;
+  pointer-events: none;
+}
+.gate[data-phase='leaving'] .wash {
+  opacity: 1;
+  transition: opacity 0.7s var(--ease-silk) 0.75s;
+}
+.gate[data-phase='leaving'] .layout {
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-exit);
+}
+.gate[data-phase='leaving'][data-mode='svg'] .frame {
+  transform: scale(1.6);
+  transition: transform 1.3s var(--ease-silk);
+}
+.gate[data-phase='leaving'][data-mode='svg'] .layout {
+  opacity: 1;
+}
+.gate[data-phase='leaving'][data-mode='svg'] .top,
+.gate[data-phase='leaving'][data-mode='svg'] .bottom,
+.gate[data-phase='leaving'][data-mode='svg'] .opening {
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-exit);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop,
+  .top,
+  .svgPediment,
+  .svgLintel,
+  .svgColumn,
+  .svgThreshold {
+    animation: none;
+  }
+  .names > *,
+  .date,
+  .bottom {
+    transition: none;
+  }
+}

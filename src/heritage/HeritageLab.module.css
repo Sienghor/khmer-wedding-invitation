@@ -1,0 +1,109 @@
+.lab {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: var(--s-8) var(--gutter);
+  font-family: var(--f-latin);
+  font-size: 1.08rem;
+  line-height: 1.55;
+}
+.head {
+  max-width: 44rem;
+  margin-bottom: var(--s-8);
+}
+.head h1 {
+  font-size: var(--t-2xl);
+  font-weight: 500;
+  line-height: 1.1;
+  margin: var(--s-3) 0;
+}
+.lab code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.82em;
+  background: var(--c-ivory-2);
+  padding: 0 0.3em;
+  border-radius: 4px;
+}
+.card {
+  display: grid;
+  gap: var(--s-6);
+  padding: var(--s-7) 0;
+  border-top: 1px solid var(--c-line);
+}
+@media (min-width: 860px) {
+  .card {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
+}
+.specimen {
+  display: grid;
+  place-items: center;
+  min-height: 220px;
+  padding: var(--s-6);
+  background: radial-gradient(circle at 50% 40%, #fffaf0, var(--c-ivory-2));
+  border-radius: var(--r-md);
+  position: sticky;
+  top: var(--s-5);
+}
+.meta h2 {
+  font-size: var(--t-xl);
+  font-weight: 500;
+  line-height: 1.15;
+  margin: var(--s-2) 0 var(--s-3);
+}
+.meta h3 {
+  font-size: var(--t-xs);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--c-gold);
+  margin: var(--s-5) 0 var(--s-2);
+}
+.meta ul {
+  margin: 0;
+  padding-left: 1.1em;
+}
+.meta dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--s-1) var(--s-4);
+  margin: var(--s-4) 0 0;
+}
+.meta dt {
+  color: var(--c-ink-faint);
+}
+.meta dd {
+  margin: 0;
+}
+.id {
+  font-family: ui-monospace, monospace;
+  font-size: 0.8rem;
+  color: var(--c-gold-deep);
+}
+.id [data-status='partially-verified'] {
+  color: var(--c-accent);
+}
+.note {
+  font-style: italic;
+  color: var(--c-ink-soft);
+}
+.refs q {
+  font-style: italic;
+}
+.refs a,
+.excluded a {
+  color: var(--c-accent);
+}
+.files {
+  margin-top: var(--s-5);
+  font-family: ui-monospace, monospace;
+  font-size: 0.76rem;
+  color: var(--c-ink-faint);
+}
+.excluded {
+  border-top: 1px solid var(--c-line);
+  padding-top: var(--s-7);
+}
+.excluded h2 {
+  font-weight: 500;
+  font-size: var(--t-xl);
+}

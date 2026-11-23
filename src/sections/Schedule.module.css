@@ -1,0 +1,131 @@
+.section {
+  padding: var(--s-9) var(--gutter);
+  background: linear-gradient(180deg, var(--c-ivory), var(--c-ivory-2));
+}
+.wrap {
+  position: relative;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 15px;
+  width: 20px;
+  translate: -50% 0;
+  opacity: 0.85;
+  -webkit-mask-image: linear-gradient(transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(transparent, #000 5%, #000 95%, transparent);
+}
+@media (min-width: 720px) {
+  .spine {
+    left: 50%;
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .spine {
+      animation: grow linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 55%;
+    }
+  }
+}
+@keyframes grow {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s-7);
+}
+.item {
+  position: relative;
+  display: grid;
+  gap: var(--s-1);
+  padding-left: 52px;
+}
+.node {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  background: var(--c-ivory);
+  border-radius: 50%;
+  padding: 1px;
+}
+@media (min-width: 720px) {
+  .item {
+    grid-template-columns: 1fr 1fr;
+    gap: 96px;
+    padding-left: 0;
+    align-items: start;
+  }
+  .node {
+    left: 50%;
+    translate: -50% 0;
+    top: 6px;
+  }
+  .time {
+    text-align: right;
+  }
+  .item:nth-child(even) .time {
+    order: 2;
+    text-align: left;
+  }
+  .item:nth-child(even) .body {
+    text-align: right;
+  }
+}
+.time {
+  font-family: var(--f-latin);
+  font-size: var(--t-xl);
+  font-weight: 500;
+  color: var(--c-gold-ink);
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+.title {
+  display: grid;
+  font-weight: 400;
+}
+.title [lang='km'] {
+  font-family: var(--f-km-display);
+  font-size: var(--t-md);
+  color: var(--c-accent);
+}
+.title [lang='en'] {
+  font-family: var(--f-latin);
+  font-size: var(--t-lg);
+  font-style: italic;
+  line-height: 1.25;
+}
+.desc {
+  margin-top: var(--s-1);
+  font-size: var(--t-sm);
+  color: var(--c-ink-soft);
+}
+.desc [lang='en'] {
+  font-family: var(--f-latin);
+  font-size: var(--t-md);
+}
+.note {
+  margin: var(--s-8) auto 0;
+  max-width: 30rem;
+  text-align: center;
+  display: grid;
+  font-size: var(--t-sm);
+  color: var(--c-ink-faint);
+}
+.note [lang='en'] {
+  font-family: var(--f-latin);
+  font-style: italic;
+  font-size: var(--t-md);
+}

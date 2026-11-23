@@ -1,0 +1,60 @@
+.tilt {
+  perspective: 1000px;
+  perspective-origin: 50% 40%;
+}
+.inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 900ms var(--ease-ceremonial);
+  will-change: transform;
+  border-radius: var(--r-md);
+}
+.tilt[data-active] .inner {
+  transition-duration: 220ms;
+}
+.sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(70% 60% at var(--sx, 50%) var(--sy, 0%), rgb(255 250 235 / 0.32), transparent 65%);
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  transition: opacity var(--d-base) var(--ease-silk);
+  transform: translateZ(1px);
+}
+.tilt[data-active] .sheen {
+  opacity: 1;
+}
+/* Touch devices: depth that responds to scroll. */
+@media (hover: none) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .inner {
+      animation: scroll-tilt linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+      transition: none;
+    }
+  }
+}
+@keyframes scroll-tilt {
+  from {
+    transform: rotateX(9deg) translateZ(-20px);
+  }
+  50% {
+    transform: rotateX(0deg) translateZ(0);
+  }
+  to {
+    transform: rotateX(-7deg) translateZ(-20px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .inner {
+    transform: none !important;
+    transition: none;
+  }
+  .sheen {
+    display: none;
+  }
+}
