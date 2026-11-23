@@ -16,7 +16,7 @@ npm run qa           # full QA suite against :4173 → qa-output/
 
 Useful URLs: `/?to=Guest%20Name` (personalised) · `/?skip` (skip opening) · `/?lite` (no WebGL) · `/?theme=burgundy` (palette preview; olive is the published theme) · `/?heritage` (registry viewer, development only: not shipped to guests).
 
-Media: `npm run media` regenerates web photos, videos and music from `src/image`, `src/video` and `src/music`. Those originals are not in git (full resolution, location data); keep your own copy. The processed files in `public/media` are committed, so a fresh clone builds and deploys without them.
+Media: `npm run media` regenerates web photos, videos and music from `src/image`, `src/video` and `src/music`. Neither the originals nor `public/media` are in git: both are stored in a private Google Drive folder (via rclone; connect once with `npm run media:login`), with versions pinned in `media.lock.json`. After changing media, run `npm run update` (process, upload, deploy). On a fresh clone, `npm run media:pull` fetches the web media (`-- --originals` for the originals too). See [docs/DEPLOY.md](docs/DEPLOY.md).
 
 ## Before publishing: fill in the real details
 
@@ -24,9 +24,9 @@ The complete field-by-field list, with current status, is in **[docs/CONTENT-CHE
 
 
 1. **`src/config/wedding.ts`**: replace every `[bracketed]` placeholder, set `event.start` and `event.end`, and set `dateIsPlaceholder: false`. Review the template Khmer wording with the families.
-2. **Photos**: originals go in `src/image` / `src/video`; run `npm run media`; choose which photo fills each slot in `src/config/photos.ts`.
+2. **Photos**: originals go in `src/image` / `src/video`; run `npm run update`; choose which photo fills each slot in `src/config/photos.ts`.
 3. **Blessings**: stored by the Cloudflare Worker in D1 (see docs/DEPLOY.md); read them at `/admin`.
-4. Music and clips: originals go in `src/music` / `src/video`; add them to SOURCES in `scripts/process-media.mjs`, then run `npm run media`. Clips are listed in `story.films` in `wedding.ts`.
+4. Music and clips: originals go in `src/music` / `src/video`; add them to SOURCES in `scripts/process-media.mjs`, then run `npm run update`. Clips are listed in `story.films` in `wedding.ts`.
 5. Optional: the palette in `src/config/theme.ts`.
 
 In development, a banner counts the remaining placeholders.

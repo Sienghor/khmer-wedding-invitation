@@ -6,8 +6,11 @@ qa-output
 .dev.vars
 # Database exports contain guests' names and messages
 backups
-# Original photos, videos and music stay on this computer only (full resolution,
-# location data). The web-ready copies in public/media are committed.
+# Media lives in a private Google Drive folder (khmer-wedding-media), not in git
+# (originals: full resolution, location data). media.lock.json records the
+# versions; npm run media:push uploads, npm run media:pull downloads.
 src/image
 src/video
 src/music
+public/media
+.media-staging

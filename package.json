@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/media-sync.mjs pull --soft",
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
@@ -13,10 +14,14 @@
     "qa": "node scripts/qa.mjs",
     "verify": "npm run typecheck && npx tsc -p worker/tsconfig.json && npm run check:heritage && npm run build",
     "media": "node scripts/process-media.mjs",
-    "cf:dev": "npm run build && wrangler dev",
+    "media:push": "node scripts/media-sync.mjs push",
+    "media:pull": "node scripts/media-sync.mjs pull",
+    "media:login": "node scripts/media-sync.mjs login",
+    "cf:dev": "node scripts/media-sync.mjs pull --soft && npm run build && wrangler dev",
     "db:migrate": "wrangler d1 migrations apply wedding-blessings --remote",
-    "deploy": "npm run verify && wrangler deploy",
-    "db:backup": "mkdir -p backups && wrangler d1 export wedding-blessings --remote --output backups/blessings-$(date +%Y-%m-%d-%H%M).sql"
+    "deploy": "npm run media:pull && npm run verify && wrangler deploy",
+    "db:backup": "mkdir -p backups && wrangler d1 export wedding-blessings --remote --output backups/blessings-$(date +%Y-%m-%d-%H%M).sql",
+    "update": "npm run media && npm run media:push && npm run deploy"
   },
   "dependencies": {
     "@fontsource/battambang": "^5.3.0",

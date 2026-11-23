@@ -99,7 +99,7 @@ Your originals in `src/image` and `src/video` were processed by `npm run media` 
 | Behind the scenes | IMG_6659 (traditional) · IMG_6694 and IMG_6699 (white wedding) | Phone clips, silent loops. **6694 is cropped to remove the crew member filming on the right.** |
 
 **To swap a photo:** change the media key on that slot's line (e.g. `'AP3I6335'` → `'AP3I6346'`).
-**To add new photos or clips:** put them in `src/image` / `src/video`, add them to `SOURCES` in `scripts/process-media.mjs`, run `npm run media`, then reference the key in `photos.ts`.
+**To add new photos or clips:** put them in `src/image` / `src/video`, add them to `SOURCES` in `scripts/process-media.mjs`, run `npm run update` (process, upload to Google Drive, deploy), then reference the key in `photos.ts` and commit `media.lock.json`.
 **Alt text** (read by screen readers) is the third argument of each slot. Edit freely.
 
 ## 9. Look & feel: `src/config/theme.ts`
