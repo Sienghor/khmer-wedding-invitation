@@ -6,6 +6,10 @@ import { Reveal } from '../motion/Reveal';
 import { Txt } from '../lib/text';
 import s from './Schedule.module.css';
 import { EN } from '../lib/lang';
+import { formatEventDate } from '../lib/date';
+
+/** Midday in Cambodia on that day, so the weekday never shifts with the guest's time zone. */
+const dayDate = (iso: string) => formatEventDate(new Date(`${iso}T12:00:00+07:00`));
 
 /**
  * 05 · Ceremony programme, one group per day. The spine is a Banteay Srei
@@ -20,11 +24,11 @@ export function Schedule() {
         <div className={s.spine} aria-hidden="true">
           <VineBand orientation="vertical" size={20} />
         </div>
-        {wedding.schedule.map((day, d) => (
-          <div key={d} className={s.day}>
+        {wedding.schedule.map((day) => (
+          <div key={day.date} className={s.day}>
             <Reveal as="h3" className={s.dayTitle} i={0}>
-              <span lang="km">{day.date.km}</span>
-              {EN && <span lang="en">{day.date.en}</span>}
+              <span lang="km">{dayDate(day.date).km}</span>
+              {EN && <span lang="en">{dayDate(day.date).en}</span>}
             </Reveal>
             <ol className={s.list}>
               {day.items.map((item, i) => (

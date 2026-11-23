@@ -35,10 +35,30 @@ export interface ScheduleItem {
 }
 
 export interface ScheduleDay {
-  /** Heading above the day's rites, e.g. ថ្ងៃព្រហស្បតិ៍ ទី៧ ខែមករា ឆ្នាំ២០២៧. */
-  date: Bi;
+  /** The day, as YYYY-MM-DD. The heading (ថ្ងៃព្រហស្បតិ៍ ទី៧ ខែមករា ឆ្នាំ២០២៧ · Thursday 7 January 2027) is written from it. */
+  date: string;
   items: ScheduleItem[];
 }
+
+/**
+ * THE COUPLE: the one place their names are written. Everything else (page title,
+ * share preview, invitation, closing signature, calendar, photo descriptions)
+ * is built from these. Khmer order: family name, then given name.
+ *
+ * Bride's given name: ស៊ំាង, typed with ំ before ា (the couple's spelling). In the
+ * site's fonts this keeps ៊ above the letter; the other order (ា then ំ) moves it
+ * below and reads like សុាំង. Keep this exact spelling.
+ */
+const groom: Person = {
+  name: { km: 'ចិន សៀងហ័រ', en: 'Chen Sienghor' },
+  role: { km: 'កូនកំលោះ', en: 'The Groom' },
+};
+const bride: Person = {
+  name: { km: 'ណាំ ស៊ំាង', en: 'Nam Saing' },
+  role: { km: 'កូនក្រមុំ', en: 'The Bride' },
+};
+/** Given name: the last word (ចិន សៀងហ័រ → សៀងហ័រ, Chen Sienghor → Sienghor). */
+const given = (full: string) => full.trim().split(/\s+/).at(-1) ?? full;
 
 export const wedding = {
   /**
@@ -56,22 +76,13 @@ export const wedding = {
 
   meta: {
     /** Used for <title>, share text and the calendar event. */
-    title: { km: 'សិរីមង្គលអាពាហ៍ពិពាហ៍', en: 'The Wedding of Chen Sienghor & Nam Saing' } as Bi,
+    title: { km: 'សិរីមង្គលអាពាហ៍ពិពាហ៍', en: `The Wedding of ${groom.name.en} & ${bride.name.en}` } as Bi,
     /** Guest name is read from ?to= or ?guest= in the URL; this is the fallback. */
     defaultGuest: { km: 'ភ្ញៀវកិត្តិយស', en: 'Honoured Guest' } as Bi,
   },
 
-  couple: {
-    groom: {
-      name: { km: 'ចិន សៀងហ័រ', en: 'Chen Sienghor' },
-      role: { km: 'កូនកំលោះ', en: 'The Groom' },
-    } as Person,
-    bride: {
-      // Supplied as “ស៊ំាង” with ំ typed before ា; stored in standard Unicode order (ា then ំ) so it renders correctly.
-      name: { km: 'ណាំ ស៊ាំង', en: 'Nam Saing' },
-      role: { km: 'កូនក្រមុំ', en: 'The Bride' },
-    } as Person,
-  },
+  /** Set at the top of this file. */
+  couple: { groom, bride },
 
   parents: {
     // English spellings: common romanisations of the Khmer names (2026-11-23). If a parent
@@ -133,14 +144,14 @@ export const wedding = {
    */
   schedule: [
     {
-      date: { km: 'ថ្ងៃព្រហស្បតិ៍ ទី៧ ខែមករា ឆ្នាំ២០២៧', en: 'Thursday 7 January 2027' },
+      date: '2027-01-07',
       items: [
         { time: { km: 'ម៉ោង ២:០០ រសៀល', en: '2:00 PM' }, title: { km: 'ពិធីសូត្រមន្តចម្រើនព្រះបរិត្ត', en: 'Monks’ Blessing' } },
         { time: { km: 'ម៉ោង ៥:០០ ល្ងាច', en: '5:00 PM' }, title: { km: 'ពិធីកាត់ខាន់ស្លា', en: 'Khan Sla Ceremony' } },
       ],
     },
     {
-      date: { km: 'ថ្ងៃសុក្រ ទី៨ ខែមករា ឆ្នាំ២០២៧', en: 'Friday 8 January 2027' },
+      date: '2027-01-08',
       items: [
         { time: { km: 'ម៉ោង ៧:០០ ព្រឹក', en: '7:00 AM' }, title: { km: 'ពិធីហែជំនូន និងរៀបរាប់ផ្លែឈើ', en: 'Procession of Gifts & Presenting the Fruit' } },
         { time: { km: 'ម៉ោង ៩:០០ ព្រឹក', en: '9:00 AM' }, title: { km: 'ពិធីកាត់សក់បង្កក់សិរី', en: 'Hair-Cutting Ceremony' } },
@@ -173,7 +184,7 @@ export const wedding = {
      * stores them in D1; read them at /admin on the live site. In `npm run dev`
      * there is no Worker, so blessings stay in the browser (demo mode).
      */
-    endpoint: (import.meta.env.PROD ? '/api/blessings' : null) as string | null,
+    endpoint: (import.meta.env?.PROD ? '/api/blessings' : null) as string | null,
     /**
      * One-tap suggestions for guests who prefer not to type (tapping adds the
      * text to the message). Template wording: review and edit freely.
@@ -204,7 +215,7 @@ export const wedding = {
       km: 'វត្តមាន និងពរជ័យរបស់លោកអ្នក គឺជាកិត្តិយសដ៏ខ្ពង់ខ្ពស់សម្រាប់ក្រុមគ្រួសារយើងខ្ញុំ។',
       en: 'Your presence and blessings are the greatest honour to our families.',
     } as Bi,
-    signature: { km: 'ចិន សៀងហ័រ និង ណាំ ស៊ំាង', en: 'Sienghor & Saing' } as Bi,
+    signature: { km: `${groom.name.km} និង ${bride.name.km}`, en: `${given(groom.name.en)} & ${given(bride.name.en)}` } as Bi,
   },
 
   /**

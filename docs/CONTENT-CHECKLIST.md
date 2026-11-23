@@ -10,14 +10,16 @@ Legend: ✅ filled · ✏️ yours to fill · 🔍 please review (template wordi
 
 ---
 
-## 1. Couple: `wedding.couple`
+## 1. Couple: `groom` and `bride` at the top of `src/config/wedding.ts`
+
+**The names are written in one place only.** Change them there and every use follows: the page title and link preview (`index.html`, filled in at build time), the opening, the invitation, the closing signature (given names, taken from the last word), the calendar entry and the photo descriptions. The programme day headings are likewise written from their dates (`schedule[].date`, `YYYY-MM-DD`).
 
 | Field | Khmer | English | Status |
 |---|---|---|---|
 | Groom | ចិន សៀងហ័រ | Chen Sienghor | ✅ |
-| Bride | ណាំ ស៊ាំង | Nam Saing | ✅ (see note) |
+| Bride | ណាំ ស៊ំាង | Nam Saing | ✅ (see note) |
 
-> **Spelling note (bride):** the name was supplied as `ស៊ំាង`, with the vowel sign ំ typed *before* ា. Unicode requires ា then ំ, as in your correct `ណាំ`. The reversed order renders with a broken dotted circle in many fonts. It is stored as **ស៊ាំង**: the same letters in standard order. If you paste names from elsewhere, check this the same way.
+> **Spelling note (bride):** ស៊ំាង is typed with ំ *before* ា, exactly as the couple writes it. In the site's fonts (Moul, Battambang) this keeps ៊ above the letter. The other order (ា then ំ) makes the fonts move ៊ below, so it reads like សុាំង. Keep this spelling; don't retype it.
 
 ## 2. Parents: `wedding.parents`
 
@@ -89,8 +91,8 @@ Each blessing sends `{ name, message, submittedAt }`.
 |---|---|
 | `invitation.message` (km / en) | Standard formal Khmer invitation formula. Check honorifics and wording with the families. |
 | `closing.message` (km / en) | Thank-you text |
-| `closing.signature` | ✅ ចិន សៀងហ័រ និង ណាំ ស៊ាំង / Sienghor & Saing |
-| `meta.title` | ✅ "The Wedding of Chen Sienghor & Nam Saing" (browser tab, share text, calendar) |
+| `closing.signature` | ✅ built from the names: ចិន សៀងហ័រ និង ណាំ ស៊ំាង / Sienghor & Saing |
+| `meta.title` | ✅ English built from the names: "The Wedding of Chen Sienghor & Nam Saing" (browser tab, share text, calendar) |
 
 ## 8. Photos & video: `src/config/photos.ts`
 

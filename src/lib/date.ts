@@ -38,7 +38,8 @@ function khmerTime(d: Date) {
 export function formatEventDate(d = eventStart()) {
   return {
     km: khmerDate(d),
-    en: fmt('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }, d),
+    // Joined by hand: browsers disagree on the comma after the weekday.
+    en: ['weekday', 'day', 'month', 'year'].map((k) => fmt('en-GB', { [k]: k === 'day' || k === 'year' ? 'numeric' : 'long' }, d)).join(' '),
     time: fmt('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }, d),
     /** e.g. ម៉ោង ៤:០០ រសៀល (formatted by hand: Khmer day-period names vary between browsers). */
     timeKm: khmerTime(d),

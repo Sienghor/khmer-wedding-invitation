@@ -12,6 +12,10 @@
  * Photography only. Ornaments are never images (see docs/02-heritage-design-spec.md).
  */
 import { mediaPhotos } from './media.generated';
+import { wedding } from './wedding';
+
+const groom = wedding.couple.groom.name.en;
+const bride = wedding.couple.bride.name.en;
 
 export type PhotoShape = 'portrait' | 'landscape' | 'square' | 'tall';
 
@@ -47,10 +51,10 @@ const slot = (id: string, media: keyof typeof mediaPhotos | null, alt: string, f
 
 export const photos: Photo[] = [
   // Threshold (first view after the doorway): intimate traditional portrait
-  slot('hero', 'AP3I6335', 'Chen Sienghor and Nam Saing in traditional Khmer wedding attire', 'tall', '50% 35%'),
+  slot('hero', 'AP3I6335', `${groom} and ${bride} in traditional Khmer wedding attire`, 'tall', '50% 35%'),
   // Solo portraits, cropped from the full-length couple portrait AP3I6331
-  slot('groom', 'groom-crop', 'Chen Sienghor in a golden Khmer silk jacket', 'portrait', '50% 25%'),
-  slot('bride', 'bride-crop', 'Nam Saing in a golden Khmer silk sbai and sampot', 'portrait', '50% 25%'),
+  slot('groom', 'groom-crop', `${groom} in a golden Khmer silk jacket`, 'portrait', '50% 25%'),
+  slot('bride', 'bride-crop', `${bride} in a golden Khmer silk sbai and sampot`, 'portrait', '50% 25%'),
   // Gallery: alternates the traditional and western sets
   slot('g-01', 'AP3I6331', 'Full-length portrait of the couple in golden Khmer silk', 'tall'),
   slot('g-02', 'AP3I6379', 'The couple in white tuxedo and gown, wearing sunglasses', 'tall'),
