@@ -39,8 +39,8 @@ English spellings weren't supplied, and romanising Khmer names has several valid
 | `dateIsPlaceholder` | `false` | ✅ |
 | `timeIsPlaceholder` | `true` | ✏️ set to `false` once the real start time is in `start` (until then the page shows "[ម៉ោង · Time]" and the countdown counts to 07:00) |
 | `venue.name` | `[ឈ្មោះទីកន្លែង]` / `[Venue name]` | ✏️ |
-| `venue.address.km` | `[អាសយដ្ឋាន ជាភាសាខ្មែរ]` | ✏️ |
-| `venue.address.en` | `NR6, Khum Andoung Pou` | ✅ from your Maps link. Edit if you prefer |
+| `venue.address.km` | ភូមិបែកចាន ឃុំអណ្តូងពោធិ៍ ស្រុកតាំងគោក ខេត្តកំពង់ធំ | ✅ |
+| `venue.address.en` | Baek Chan Village, Andoung Pou Commune, Taing Kouk District, Kampong Thom | ✅ matches the Khmer |
 | `venue.maps` | `https://maps.app.goo.gl/GQHrGwEfK48T38uT6` | ✅ ("Directions" button) |
 | `dressCode` km / en | olive green | ✅ |
 | `notes` (2 items) km / en | placeholders (e.g. parking, arrival) | ✏️ add or remove items freely |

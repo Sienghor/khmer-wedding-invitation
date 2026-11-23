@@ -104,8 +104,10 @@ export const wedding = {
     timeZone: 'Asia/Phnom_Penh',
     venue: {
       name: { km: '[ឈ្មោះទីកន្លែង]', en: '[Venue name]' } as Bi,
-      // English line is the address Google Maps returns for the link below; add the Khmer address.
-      address: { km: '[អាសយដ្ឋាន ជាភាសាខ្មែរ]', en: 'NR6, Khum Andoung Pou' } as Bi,
+      address: {
+        km: 'ភូមិបែកចាន ឃុំអណ្តូងពោធិ៍ ស្រុកតាំងគោក ខេត្តកំពង់ធំ',
+        en: 'Baek Chan Village, Andoung Pou Commune, Taing Kouk District, Kampong Thom',
+      } as Bi,
       /** Google Maps search text or a full https://maps.google.com/… link. */
       maps: 'https://maps.app.goo.gl/GQHrGwEfK48T38uT6',
     },
