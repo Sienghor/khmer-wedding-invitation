@@ -9,7 +9,7 @@
   background:
     radial-gradient(60% 45% at 50% 38%, #fffaf0, transparent 70%),
     var(--c-ivory);
-  overflow: hidden;
+  overflow: clip; /* not hidden: a scroll container would stop the scroll-linked parallax inside */
 }
 .portal {
   display: grid;
@@ -167,17 +167,187 @@
     animation: none;
   }
 }
-.enter {
-  animation: enter var(--d-reveal) var(--ease-ceremonial) both;
+/*
+ * NAMES · ENTRANCE
+ * Three lines, three motions, tight offsets: the English names surface from a
+ * soft blur, the Khmer line opens from its centre, the date's tracking settles.
+ * Nothing plays while the gate is closed (data-entrance='gated').
+ */
+.groomEn,
+.brideEn,
+.groomKm,
+.brideKm {
+  display: inline-block;
+  /* On desktop .en is a grid: keep each name's box to its own width, so the
+     doorway and hero renderings of a name have the same shape mid-transition. */
+  justify-self: start;
+  /* Keep the line's own leading (base.css sets :lang(km) on every element). */
+  line-height: inherit;
 }
-@keyframes enter {
-  from {
+@media (prefers-reduced-motion: no-preference) {
+  .hero[data-entrance='gated'] .line {
     opacity: 0;
-    transform: translateY(18px);
+  }
+  /* Fill backwards only: once finished the lines carry no animation, so they are
+     not isolated groups and the light sweep below blends with the page. */
+  .hero[data-entrance='enter'] .en {
+    animation: name-surface 900ms var(--ease-spring, var(--ease-ceremonial)) 60ms backwards;
+  }
+  .hero[data-entrance='enter'] .km {
+    animation: name-open 850ms var(--ease-spring, var(--ease-ceremonial)) 240ms backwards;
+  }
+  .hero[data-entrance='enter'] .date {
+    animation: name-track 900ms var(--ease-spring, var(--ease-ceremonial)) 400ms backwards;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .enter {
-    animation: none;
+@keyframes name-surface {
+  from {
+    opacity: 0;
+    transform: translateY(0.4em);
+    filter: blur(8px);
+  }
+}
+@keyframes name-open {
+  from {
+    opacity: 0;
+    /* Generous vertical inset: Khmer marks reach well above and below the line box. */
+    clip-path: inset(-60% 50% -60% 50%);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(-60% 0 -60% 0);
+  }
+}
+@keyframes name-track {
+  from {
+    opacity: 0;
+    letter-spacing: 0.7em;
+  }
+}
+
+/*
+ * NAMES · CARRIED THROUGH THE DOORWAY
+ * While <html data-carry> is set (App.tsx), each name and the date glide from
+ * their place in the doorway (Opening.module.css uses the same names).
+ */
+:global(html[data-carry]) .hero[data-entrance='carried'] .groomEn {
+  view-transition-name: kwi-groom-en;
+}
+:global(html[data-carry]) .hero[data-entrance='carried'] .brideEn {
+  view-transition-name: kwi-bride-en;
+}
+:global(html[data-carry]) .hero[data-entrance='carried'] .groomKm {
+  view-transition-name: kwi-groom-km;
+}
+:global(html[data-carry]) .hero[data-entrance='carried'] .brideKm {
+  view-transition-name: kwi-bride-km;
+}
+:global(html[data-carry]) .hero[data-entrance='carried'] .date {
+  view-transition-name: kwi-date;
+}
+/* Desktop stacks the English names, so a Khmer name travelling from under the
+   groom's name would cross the bride's. There the doorway's Khmer names fade
+   where they stood and the hero's Khmer line simply appears with the page. */
+@media (min-width: 900px) {
+  :global(html[data-carry]) .hero[data-entrance='carried'] .groomKm,
+  :global(html[data-carry]) .hero[data-entrance='carried'] .brideKm {
+    view-transition-name: none;
+  }
+  :global(html[data-carry])::view-transition-old(kwi-groom-km),
+  :global(html[data-carry])::view-transition-old(kwi-bride-km) {
+    animation-duration: 320ms;
+  }
+}
+:global(html[data-carry])::view-transition-group(kwi-groom-en),
+:global(html[data-carry])::view-transition-group(kwi-bride-en),
+:global(html[data-carry])::view-transition-group(kwi-groom-km),
+:global(html[data-carry])::view-transition-group(kwi-bride-km),
+:global(html[data-carry])::view-transition-group(kwi-date) {
+  animation-duration: 1000ms;
+  animation-timing-function: var(--ease-spring, var(--ease-ceremonial));
+}
+/* The names cascade from the bottom up: each one is already moving aside before
+   the line above it comes down, so the five paths never cross. */
+:global(html[data-carry])::view-transition-group(kwi-bride-km) {
+  animation-delay: 50ms;
+}
+:global(html[data-carry])::view-transition-group(kwi-bride-en) {
+  animation-delay: 100ms;
+}
+:global(html[data-carry])::view-transition-group(kwi-groom-km) {
+  animation-delay: 150ms;
+}
+:global(html[data-carry])::view-transition-group(kwi-groom-en) {
+  animation-delay: 200ms;
+}
+/* Same words, different size and colour: let the old and new renderings fill the
+   moving box together rather than stack at the top. */
+:global(html[data-carry])::view-transition-old(*),
+:global(html[data-carry])::view-transition-new(*) {
+  height: 100%;
+  animation-duration: 700ms;
+  animation-timing-function: var(--ease-silk);
+}
+/* The wash dissolves into the hero underneath the moving names. */
+:global(html[data-carry])::view-transition-old(root),
+:global(html[data-carry])::view-transition-new(root) {
+  animation-duration: 900ms;
+}
+
+/*
+ * NAMES · RAKING LIGHT
+ * One pass of warm light across the names after they land, echoing the sweep
+ * over the doorway's lintel. A warm band soft-lit over the live text: on the
+ * ivory ground it barely registers, on the ink it reads as gilding. The band
+ * fades out at its top and bottom so it never shows a box edge.
+ */
+.line {
+  position: relative;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero[data-entrance='enter'] .line::after,
+  .hero[data-entrance='landed'] .line::after {
+    content: '';
+    position: absolute;
+    inset: -0.15em -0.4em;
+    pointer-events: none;
+    background: linear-gradient(
+        102deg,
+        transparent 38%,
+        rgb(240 200 120 / 0.7) 45%,
+        rgb(255 236 190) 50%,
+        rgb(240 200 120 / 0.7) 55%,
+        transparent 62%
+      )
+      no-repeat;
+    background-size: 260% 100%;
+    background-position: 100% 0;
+    -webkit-mask-image: linear-gradient(transparent, #000 22%, #000 78%, transparent), linear-gradient(90deg, transparent, #000 0.6em, #000 calc(100% - 0.6em), transparent);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(transparent, #000 22%, #000 78%, transparent), linear-gradient(90deg, transparent, #000 0.6em, #000 calc(100% - 0.6em), transparent);
+    mask-composite: intersect;
+    mix-blend-mode: soft-light;
+    animation: rake 1400ms var(--ease-silk) both;
+  }
+  /* A slight stagger down the lines, as a raking light falls diagonally. */
+  .hero[data-entrance='enter'] .en::after {
+    animation-delay: 1000ms;
+  }
+  .hero[data-entrance='enter'] .km::after {
+    animation-delay: 1140ms;
+  }
+  .hero[data-entrance='enter'] .date::after {
+    animation-delay: 1320ms;
+  }
+  .hero[data-entrance='landed'] .km::after {
+    animation-delay: 140ms;
+  }
+  .hero[data-entrance='landed'] .date::after {
+    animation-delay: 280ms;
+  }
+}
+@keyframes rake {
+  to {
+    background-position: 0% 0;
   }
 }

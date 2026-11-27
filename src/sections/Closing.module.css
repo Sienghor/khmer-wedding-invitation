@@ -1,6 +1,8 @@
 .section {
   position: relative;
-  overflow: hidden;
+  /* clip, not hidden: a hidden box is a scroll container, which would capture
+     the view() timelines of the reveals inside and freeze them. */
+  overflow: clip;
   color: var(--c-ivory);
   background:
     radial-gradient(80% 45% at 50% 78%, rgb(213 183 122 / 0.28), transparent 70%),

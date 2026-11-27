@@ -3,6 +3,7 @@ import { HERITAGE_MOTIFS, RESEARCHED_NOT_USED } from './registry';
 import { Lintel } from '../ornaments/Lintel';
 import { LotusPetalBand } from '../ornaments/LotusPetalBand';
 import { LotusRosette } from '../ornaments/LotusRosette';
+import { RomdoulFlower } from '../ornaments/RomdoulFlower';
 import { NagaFan } from '../ornaments/NagaFan';
 import { NagaBalustrade } from '../ornaments/NagaBalustrade';
 import { Colonnette } from '../ornaments/Colonnette';
@@ -24,6 +25,7 @@ const SPECIMENS: Record<string, ReactNode> = {
   'KH-LIN-01': <Lintel relief />,
   'KH-LOT-01': <LotusPetalBand height={28} />,
   'KH-LOT-02': <LotusRosette size={120} />,
+  'KH-ROM-01': <RomdoulFlower size={120} />,
   'KH-NAG-01': <NagaFan size={180} />,
   'KH-NAG-02': <NagaBalustrade />,
   'KH-COL-01': <Colonnette style={{ height: 320, width: 'auto' }} />,

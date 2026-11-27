@@ -63,19 +63,37 @@
 
   /*
    * MOTION LANGUAGE ("ceremonial")
-   * One family of curves. Entrances decelerate long, like a bow; nothing bounces.
+   * Entrances settle like a critically damped spring: quick to arrive, no
+   * overshoot, no bounce. The cubic-beziers remain as fallbacks and for
+   * state changes. Long durations are kept for the hero and the doorway only.
    */
-  --ease-ceremonial: cubic-bezier(0.22, 1, 0.36, 1); /* entrances */
+  --ease-ceremonial: cubic-bezier(0.22, 1, 0.36, 1); /* entrances (fallback) */
   --ease-silk: cubic-bezier(0.65, 0, 0.35, 1); /* state changes, crossfades */
   --ease-exit: cubic-bezier(0.55, 0, 1, 0.45); /* departures (short) */
+  /* Critically damped spring (ζ = 1, ω = 9.2): x(t) = 1 − (1 + ωt)·e^(−ωt). Never exceeds 1. */
+  --ease-spring: linear(0, 0.015 2%, 0.078 5%, 0.168 8%, 0.269 11%, 0.401 15%, 0.522 19%, 0.647 24%, 0.745 29%, 0.831 35%, 0.898 42%, 0.944 50%, 0.974 60%, 0.99 72%, 0.997 86%, 1);
+  /* Scroll-scrubbed entrances: front-loaded, so content is mostly there as soon as it enters. */
+  --ease-scrub: cubic-bezier(0.2, 0.7, 0.3, 1);
   --d-quick: 220ms;
   --d-base: 520ms;
   --d-slow: 900ms;
-  --d-reveal: 1100ms;
-  --d-draw: 1800ms;
-  --stagger: 90ms;
+  --d-reveal: 700ms;
+  --d-draw: 1400ms;
+  --d-hero: 1100ms; /* hero and doorway only */
+  --d-hero-draw: 1800ms; /* hero and doorway only */
+  --stagger: 70ms;
+  /* Scroll distance over which a scrubbed entrance completes, and per-step offset. */
+  --scrub-len: 26vh;
+  --scrub-step: 3.5vh;
 
   color-scheme: light;
+}
+
+/* Browsers without linear(): the spring falls back to the ceremonial curve. */
+@supports not (transition-timing-function: linear(0, 1)) {
+  :root {
+    --ease-spring: var(--ease-ceremonial);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -85,6 +103,8 @@
     --d-slow: 1ms;
     --d-reveal: 1ms;
     --d-draw: 1ms;
+    --d-hero: 1ms;
+    --d-hero-draw: 1ms;
     --stagger: 0ms;
   }
 }

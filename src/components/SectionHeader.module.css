@@ -36,3 +36,18 @@
   justify-items: center;
   margin-bottom: var(--s-1);
 }
+
+/* Rhythm (see SectionHeader.tsx). Lengths are scroll distances for the scrubbed path. */
+.header[data-crown='pediment'] {
+  --draw-len: 55vh; /* the fronton is carved slowly */
+}
+.header[data-rhythm='together'] {
+  --draw-len: 30vh;
+}
+.header[data-rhythm='answer'] {
+  --draw-len: 34vh;
+}
+/* Dark sections settle a little slower, like eyes adjusting. */
+.header[data-tone='light'] .title {
+  --scrub-len: 32vh;
+}

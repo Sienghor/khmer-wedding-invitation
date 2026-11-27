@@ -3,7 +3,7 @@ import { wedding } from '../config/wedding';
 import { Glass } from '../glass/Glass';
 import { Colonnette } from '../ornaments/Colonnette';
 import { Lintel } from '../ornaments/Lintel';
-import { LotusRosette } from '../ornaments/LotusRosette';
+import { RomdoulFlower } from '../ornaments/RomdoulFlower';
 import { DOOR, DOOR_ASPECT, DOOR_TOTAL_H, PED_BOX, PED_TIERS } from '../three/doorwayGeometry';
 import { Pediment } from '../ornaments/Pediment';
 import { shouldUse3D } from '../three/capability';
@@ -14,6 +14,7 @@ import { readGuest } from '../lib/guest';
 import { Txt } from '../lib/text';
 import s from './Opening.module.css';
 import { music } from '../lib/music';
+import { canCarry } from '../three/openedContext';
 
 const Doorway3D = lazy(() => import('../three/Doorway3D'));
 
@@ -45,6 +46,8 @@ const layout = {
 export function Opening({ onOpened }: { onOpened: () => void }) {
   const [use3D, setUse3D] = useState(shouldUse3D);
   const [phase, setPhase] = useState<Phase>('assembling');
+  // Decided on tap: the names stay through the doorway and glide into the hero (App.tsx).
+  const [carry, setCarry] = useState(false);
   const frameRef = useRef<HTMLDivElement>(null);
   const door = useRef<DoorwayHandle>(null);
   const button = useRef<HTMLButtonElement>(null);
@@ -87,14 +90,17 @@ export function Opening({ onOpened }: { onOpened: () => void }) {
     if (phase === 'leaving') return;
     // Must run inside the tap itself: browsers only allow sound after a gesture.
     music.startFromGesture();
+    setCarry(canCarry());
     setPhase('leaving');
-    const minimum = new Promise((r) => setTimeout(r, reduced ? 0 : 1300));
+    // The ivory wash is full at 1.45 s (Opening.module.css); hand over only then,
+    // so the view transition's first snapshot is the wash with the names on it.
+    const minimum = new Promise((r) => setTimeout(r, reduced ? 0 : 1450));
     await Promise.all([use3D && door.current ? door.current.open() : Promise.resolve(), minimum]);
     onOpened();
   };
 
   return (
-    <section className={s.gate} data-phase={phase} data-mode={use3D ? '3d' : 'svg'} aria-labelledby="opening-title">
+    <section className={s.gate} data-phase={phase} data-mode={use3D ? '3d' : 'svg'} data-carry={carry || undefined} aria-labelledby="opening-title">
       <div className={s.backdrop} aria-hidden="true" />
       {use3D && (
         <Suspense fallback={null}>
@@ -141,20 +147,20 @@ export function Opening({ onOpened }: { onOpened: () => void }) {
 
             <div className={s.opening} style={{ top: layout.openingTop, bottom: layout.thresholdH, left: layout.openingInset, right: layout.openingInset }}>
               <div className={s.names}>
-                <span className={s.nameEn}>
+                <span className={`${s.nameEn} ${s.groomEn}`}>
                   <Txt>{couple.groom.name.en}</Txt>
                 </span>
-                <span lang="km" className={`km-display ${s.nameKm}`}>
+                <span lang="km" className={`km-display ${s.nameKm} ${s.groomKm}`}>
                   <Txt>{couple.groom.name.km}</Txt>
                 </span>
                 <span className={s.amp} aria-hidden="true">
-                  <LotusRosette size={26} tone="light" />
+                  <RomdoulFlower size={26} tone="light" />
                 </span>
                 <span className="visually-hidden">and</span>
-                <span className={s.nameEn}>
+                <span className={`${s.nameEn} ${s.brideEn}`}>
                   <Txt>{couple.bride.name.en}</Txt>
                 </span>
-                <span lang="km" className={`km-display ${s.nameKm}`}>
+                <span lang="km" className={`km-display ${s.nameKm} ${s.brideKm}`}>
                   <Txt>{couple.bride.name.km}</Txt>
                 </span>
               </div>
@@ -168,7 +174,7 @@ export function Opening({ onOpened }: { onOpened: () => void }) {
         <footer className={s.bottom}>
           <p className={s.greeting}>
             <span lang="km">សូមគោរពអញ្ជើញ</span>
-            <span className={s.guest} lang={guest.personalised ? undefined : 'km'}>
+            <span className={`${s.guest} ${guest.personalised ? s.sweep : ''}`} lang={guest.personalised ? undefined : 'km'}>
               {guest.km}
             </span>
             {!guest.personalised && (

@@ -165,7 +165,8 @@ for (const [name, w, h] of VIEWPORTS) {
   await page.click('[data-open-invitation]');
   await page.waitForTimeout(600);
   const opened = await page.evaluate(() => !document.querySelector('[data-phase]'));
-  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal]')].filter((e) => getComputedStyle(e).opacity !== '1').length);
+  // Hidden = not readable. Some ornaments rest at a designed opacity below 1 (e.g. the hero pilasters at 0.9).
+  const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal]')].filter((e) => parseFloat(getComputedStyle(e).opacity) < 0.5).length);
   report.flows.reducedMotion = { mode, phaseAfter800ms: readyQuickly, opened, hiddenRevealElements: hidden, problems };
   await ctx.close();
 }

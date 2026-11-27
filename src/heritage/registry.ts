@@ -56,6 +56,8 @@ const WIKI_ANGKOR_THOM = 'https://en.wikipedia.org/wiki/Angkor_Thom';
 const GLAIZE_BANTEAY_SREI = 'https://www.theangkorguide.com/text/part-two/outer-monuments/banteaysrei.htm';
 const GLAIZE_ORNAMENT = 'https://www.theangkorguide.com/text/part-one/chapter_8.htm';
 const GLAIZE_BAYON = 'https://www.theangkorguide.com/text/part-two/angkorthom/bayon.htm';
+const WIKI_RUMDUOL = 'https://en.wikipedia.org/wiki/Sphaerocoryne_lefevrei';
+const WIKI_NATIONAL_SYMBOLS = 'https://en.wikipedia.org/wiki/National_symbols_of_Cambodia';
 
 export const HERITAGE_MOTIFS: HeritageMotif[] = [
   {
@@ -561,6 +563,56 @@ export const HERITAGE_MOTIFS: HeritageMotif[] = [
       'Used as the closing blessing: the faces "symbolize compassion", which suits thanks to guests. Families who prefer no sacred imagery can remove it from Closing.tsx.',
     ],
     status: 'verified',
+  },
+  {
+    id: 'KH-ROM-01',
+    khmerName: 'រំដួល',
+    khmerNameNote: 'Khmer script as given by both cited Wikipedia pages; romanised there as rumduol / Rumduŏl.',
+    englishName: 'Romduol (rumduol) flower, the national flower of Cambodia',
+    heritageSource: 'National symbol (botanical), not a temple carving: designated by royal decree in 2005',
+    templeOrArtifact: 'None. A living flower (Sphaerocoryne lefevrei; the decree uses the name Mitrella mesnyi), drawn from its botanical description',
+    period: null,
+    references: [
+      {
+        label: 'Wikipedia: Sphaerocoryne lefevrei (lead; Rumduol redirects here)',
+        url: WIKI_RUMDUOL,
+        quote: 'The rumduol was declared the national flower of Cambodia in 2005.',
+      },
+      {
+        label: 'Wikipedia: Sphaerocoryne lefevrei (flower)',
+        url: WIKI_RUMDUOL,
+        quote: 'cream-coloured, yellow or yellow-brown flowers with three outer and three inner petals',
+      },
+      {
+        label: 'Wikipedia: Sphaerocoryne lefevrei (inner petals)',
+        url: WIKI_RUMDUOL,
+        quote: 'the latter of which close in over the centre of the flower',
+      },
+      {
+        label: 'Wikipedia: Sphaerocoryne lefevrei (cultural significance)',
+        url: WIKI_RUMDUOL,
+        quote: "have long been used as a metaphor for women's beauty in Khmer and Thai literature.",
+      },
+      {
+        label: 'Wikipedia: National symbols of Cambodia',
+        url: WIKI_NATIONAL_SYMBOLS,
+        quote: 'In 2005, the Kingdom of Cambodia designated seven flora and fauna as national symbols',
+      },
+    ],
+    characteristics: [
+      'Three outer and three inner petals.',
+      'The inner petals close in over the centre of the flower.',
+      'Cream-coloured, yellow or yellow-brown.',
+      "A metaphor for women's beauty in Khmer literature; Cambodia's national flower since 2005.",
+    ],
+    implementation: ['src/ornaments/geometry/romdoul.ts', 'src/ornaments/RomdoulFlower.tsx'],
+    adaptationNotes: [
+      'Unlike every other motif here, this is not copied from a carving: it is drawn from the botanical description, then gilded and incised so it sits in the same family as the temple ornament.',
+      'Seen from the front: outer petals at 120° intervals, inner petals offset by 60° with their tips meeting at the centre as a closed dome. Petal proportions, the midribs and the gilt colouring are design choices; the source gives cream to yellow-brown.',
+      'Used only for the couple\'s own moments (between their names, the save-the-date seal, the knot of the blessing thread). The lotus rosette (KH-LOT-02) is kept wherever the ornament quotes temple carving or marks the rites.',
+      'Taxonomy is unsettled in the sources (some treat it as S. affinis); the decree\'s Mitrella mesnyi is reported as an illegitimate synonym. Only the common and Khmer names are shown to guests.',
+    ],
+    status: 'partially-verified',
   },
 ];
 

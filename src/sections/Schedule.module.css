@@ -28,7 +28,10 @@
     .spine {
       animation: grow linear both;
       animation-timeline: view();
-      animation-range: entry 10% cover 55%;
+      /* Linear in scroll with the spine's own height, so its growing tip holds
+         a steady line at 70% of the viewport. Each rosette blooms as it
+         crosses that line (see .node below). */
+      animation-range: entry-crossing 30vh entry-crossing calc(100% + 30vh);
     }
   }
 }
@@ -44,13 +47,32 @@
 .day + .day {
   margin-top: var(--s-7);
 }
+/* The day heading stays pinned while its own rites scroll past, then leaves
+   with its group. Nav is a bottom pill on phones/tablets, a top pill ≥900px. */
 .dayTitle {
-  position: relative;
+  position: sticky;
+  z-index: 3;
+  top: max(0.75rem, env(safe-area-inset-top));
   display: grid;
   width: fit-content;
-  margin: 0 0 var(--s-6);
-  padding: var(--s-2) var(--s-4) var(--s-2) 52px;
+  margin: 0 0 var(--s-6) 40px;
+  padding: var(--s-2) var(--s-4) var(--s-2) 12px;
   font-weight: 400;
+  background: color-mix(in oklab, var(--c-ivory) 86%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-radius: var(--r-pill, 999px);
+}
+@media (max-width: 719.98px) {
+  /* Pinned just below the music button (fixed top-right, 48px) so the two never overlap. */
+  .dayTitle {
+    top: calc(max(0.75rem, env(safe-area-inset-top)) + 48px + 0.5rem);
+  }
+}
+@media (min-width: 900px) {
+  .dayTitle {
+    top: calc(1.1rem + 56px + 0.75rem);
+  }
 }
 .dayTitle [lang='km'] {
   font-family: var(--f-km-display);
@@ -69,8 +91,6 @@
     margin-inline: auto;
     padding: var(--s-3) var(--s-6);
     text-align: center;
-    background: var(--c-ivory);
-    border-radius: 999px;
   }
 }
 .list {
@@ -90,6 +110,8 @@
   position: absolute;
   left: 0;
   top: 2px;
+  isolation: isolate;
+  display: grid;
   background: var(--c-ivory);
   border-radius: 50%;
   padding: 1px;
@@ -157,6 +179,161 @@
   font-family: var(--f-latin);
   font-size: var(--t-md);
 }
+/* RITES ARRIVING: rosette blooms first, then the time, then the title. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .item {
+      view-timeline: --rite block;
+    }
+    .node,
+    .time,
+    .body {
+      animation-fill-mode: both;
+      animation-timeline: --rite;
+    }
+    /* Ranges measured from the rite's top edge entering the viewport; 30vh
+       in is where the spine's tip is. */
+    .node {
+      animation-name: bloom;
+      animation-timing-function: var(--ease-spring, var(--ease-ceremonial));
+      animation-range: cover calc(30vh - 48px) cover calc(30vh + 24px);
+    }
+    .time {
+      animation-name: arrive;
+      animation-timing-function: var(--ease-ceremonial);
+      animation-range: cover calc(30vh - 16px) cover calc(30vh + 72px);
+    }
+    .body {
+      animation-name: arrive;
+      animation-timing-function: var(--ease-ceremonial);
+      animation-range: cover calc(30vh + 16px) cover calc(30vh + 112px);
+    }
+  }
+}
+/* Without scroll-driven animations: the same order, played once on arrival. */
+@supports not (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .node,
+    .time,
+    .body {
+      transition:
+        opacity 700ms var(--ease-ceremonial),
+        translate 700ms var(--ease-ceremonial),
+        scale 900ms var(--ease-spring, var(--ease-ceremonial)),
+        rotate 900ms var(--ease-spring, var(--ease-ceremonial));
+    }
+    .item:not([data-arrived]) .node {
+      opacity: 0;
+      scale: 0.35;
+      rotate: -50deg;
+    }
+    .item:not([data-arrived]) .time,
+    .item:not([data-arrived]) .body {
+      opacity: 0;
+      translate: 0 14px;
+    }
+    .time {
+      transition-delay: 180ms;
+    }
+    .body {
+      transition-delay: 320ms;
+    }
+  }
+}
+@keyframes bloom {
+  from {
+    opacity: 0;
+    scale: 0.35;
+    rotate: -50deg;
+  }
+  40% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+    rotate: 0deg;
+  }
+}
+@keyframes arrive {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* LIVE ON THE DAY (data-state is only set on the wedding days). */
+.item {
+  transition: opacity var(--d-slow) var(--ease-silk);
+}
+.item[data-state='past'] {
+  opacity: 0.5;
+}
+.item[data-state='past'] .node {
+  filter: saturate(0.3);
+}
+.item[data-state='now'] .node::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -16px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--c-gold) 55%, transparent), color-mix(in oklab, var(--c-gold) 18%, transparent) 60%, transparent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .item[data-state='now'] .node::before {
+    animation: breathe 4.2s var(--ease-silk) infinite alternate;
+  }
+}
+@keyframes breathe {
+  from {
+    opacity: 0.45;
+    scale: 0.8;
+  }
+  to {
+    opacity: 1;
+    scale: 1.12;
+  }
+}
+.nowTag {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
+  width: fit-content;
+  margin-bottom: var(--s-1);
+  padding: 0.1em 0.75em;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-pill, 999px);
+  background: color-mix(in oklab, var(--c-gold) 12%, var(--c-ivory));
+  color: var(--c-accent);
+  font-size: var(--t-sm);
+  line-height: 1.6;
+}
+.nowTag [lang='en'] {
+  font-family: var(--f-latin);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-gold-ink);
+}
+.nowTag [lang='en']::before {
+  content: '·';
+  margin-right: 0.45em;
+  letter-spacing: 0;
+}
+@media (min-width: 720px) {
+  .item:nth-child(even) .nowTag {
+    margin-left: auto;
+  }
+}
+.body {
+  display: grid;
+}
+
 .note {
   margin: var(--s-8) auto 0;
   max-width: 30rem;

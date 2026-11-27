@@ -4,7 +4,6 @@ import { SectionHeader } from '../components/SectionHeader';
 import { Gallery } from '../gallery/Gallery';
 import { LoopFilm } from '../gallery/LoopFilm';
 import { mediaVideos } from '../config/media.generated';
-import { Tilt3D } from '../motion/Tilt3D';
 import { Reveal } from '../motion/Reveal';
 import { EN } from '../lib/lang';
 import { WallTapestry } from '../ornaments/WallTapestry';
@@ -18,21 +17,23 @@ export function Story() {
       <div className="wall-tapestry">
         <WallTapestry />
       </div>
-      <SectionHeader km="កម្រងរូបភាព" en="Photo Album" id="story-title" />
+      <SectionHeader km="កម្រងរូបភាព" en="Photo Album" id="story-title" rhythm="together" />
       <Gallery />
 
       <div className={s.filmsHead}>
-        {EN && <p className="eyebrow">{story.films.heading.en}</p>}
-        <h3 lang="km" className={`km-display ${s.galleryTitle}`}>
+        {EN && (
+          <Reveal as="p" variant="fade" className="eyebrow">
+            {story.films.heading.en}
+          </Reveal>
+        )}
+        <Reveal as="h3" variant="mask" at={0.5} lang="km" className={`km-display ${s.galleryTitle}`}>
           {story.films.heading.km}
-        </h3>
+        </Reveal>
       </div>
       <div className={s.films} style={filmColumns(story.films.clips.map((c) => c.media))}>
         {story.films.clips.map((c, i) => (
-          <Reveal as="figure" key={c.media} variant="scale" i={i} className={s.filmItem} data-wide={(mediaVideos[c.media]?.aspect ?? 1) > 1 || undefined}>
-            <Tilt3D>
-              <LoopFilm media={c.media} label={c.label.km} />
-            </Tilt3D>
+          <Reveal as="figure" key={c.media} variant="image" i={i} className={s.filmItem} data-wide={(mediaVideos[c.media]?.aspect ?? 1) > 1 || undefined}>
+            <LoopFilm media={c.media} label={c.label.km} />
             <Bi value={c.label} as="figcaption" className={s.caption} />
           </Reveal>
         ))}

@@ -24,15 +24,23 @@
   cursor: zoom-in;
   border-radius: var(--r-md);
 }
+.tile:focus-visible {
+  outline: 2px solid var(--c-gold);
+  outline-offset: 3px;
+}
+.reveal {
+  display: block;
+}
+/* `scale` (not `transform`) so hover never fights the reveal's own transforms. */
 .photo {
-  transition: transform var(--d-slow) var(--ease-ceremonial), box-shadow var(--d-slow) var(--ease-ceremonial);
+  transition: scale var(--d-slow) var(--ease-spring, var(--ease-ceremonial));
 }
 @media (hover: hover) {
   .tile:hover .photo {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-soft);
+    scale: 1.02;
   }
 }
 .tile:active .photo {
-  transform: scale(0.985);
+  scale: 0.985;
+  transition-duration: var(--d-quick);
 }

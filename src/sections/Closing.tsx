@@ -23,16 +23,16 @@ export function Closing({ onReplay }: { onReplay: () => void }) {
   return (
     <section className={s.section} aria-labelledby="closing-title" id="closing">
       <div className={s.text}>
-        <Reveal variant="scale" className={s.bayon}>
+        <Reveal variant="fade" className={s.bayon}>
           <BayonTower width="100%" />
         </Reveal>
-        <Reveal as="h2" id="closing-title" className={s.heading}>
+        <Reveal as="h2" variant="mask" at={0.8} id="closing-title" className={s.heading}>
           <span lang="km" className="km-display">
             {closing.heading.km}
           </span>
           {EN && <span lang="en">{closing.heading.en}</span>}
         </Reveal>
-        <Reveal i={1} className={s.message}>
+        <Reveal variant="fade" at={1.2} className={s.message}>
           <p lang="km">{closing.message.km}</p>
           {EN && (
             <p lang="en" className={s.messageEn}>
@@ -40,10 +40,10 @@ export function Closing({ onReplay }: { onReplay: () => void }) {
             </p>
           )}
         </Reveal>
-        <Reveal variant="draw" i={2}>
+        <Reveal variant="draw" style={{ ['--draw-len' as string]: '30vh' }}>
           <OrnamentDivider tone="light" width={220} />
         </Reveal>
-        <Reveal i={3} className={s.signature}>
+        <Reveal variant="mask" at={0.4} className={s.signature}>
           <span lang="km">
             <Txt>{closing.signature.km}</Txt>
           </span>

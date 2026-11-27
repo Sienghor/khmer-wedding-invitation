@@ -22,6 +22,7 @@
 | KH-VIN-01 | Foliated scroll (rinceau): running bands and pilaster repeats | Banteay Srei wall, pilaster and fronton decoration; Khmer pilasters flanking doorways | Banteay Srei style (967–1000) for the bands cited; the pilaster convention spans the classic period | partially-verified |
 | KH-WAL-01 | Wall tapestry: squares with foliate motifs | Banteay Srei wall surfaces | Banteay Srei style (967–1000) | partially-verified |
 | KH-BAY-01 | Bayon face tower | Bayon, Angkor Thom (state temple of Jayavarman VII); also the gate towers of Angkor Thom | Bayon style (1181–1243); built late 12th or early 13th century | verified |
+| KH-ROM-01 | Romduol (rumduol) flower, the national flower of Cambodia | None | Not established by the cited sources | partially-verified |
 
 ---
 
@@ -448,6 +449,42 @@
 - The face is deliberately reduced to a few incised lines to keep it dignified and avoid caricature. It is not a portrait of any specific face.
 - Upper tiers are crowned with upward lotus petals (KH-LOT-01) and the crowning lotus is a lotus bud; the tier proportions are design choices.
 - Used as the closing blessing: the faces "symbolize compassion", which suits thanks to guests. Families who prefer no sacred imagery can remove it from Closing.tsx.
+
+---
+
+## KH-ROM-01: Romduol (rumduol) flower, the national flower of Cambodia
+
+| Field | Value |
+|---|---|
+| Khmer name | រំដួល |
+| English name | Romduol (rumduol) flower, the national flower of Cambodia |
+| Heritage source | National symbol (botanical), not a temple carving: designated by royal decree in 2005 |
+| Temple / artifact | None. A living flower (Sphaerocoryne lefevrei; the decree uses the name Mitrella mesnyi), drawn from its botanical description |
+| Period / style | Not established by the cited sources |
+| Verification | partially-verified |
+| Implementation | `src/ornaments/geometry/romdoul.ts`<br>`src/ornaments/RomdoulFlower.tsx` |
+
+**Evidence (quoted from source)**
+
+- “The rumduol was declared the national flower of Cambodia in 2005.”, [Wikipedia: Sphaerocoryne lefevrei (lead; Rumduol redirects here)](https://en.wikipedia.org/wiki/Sphaerocoryne_lefevrei)
+- “cream-coloured, yellow or yellow-brown flowers with three outer and three inner petals”, [Wikipedia: Sphaerocoryne lefevrei (flower)](https://en.wikipedia.org/wiki/Sphaerocoryne_lefevrei)
+- “the latter of which close in over the centre of the flower”, [Wikipedia: Sphaerocoryne lefevrei (inner petals)](https://en.wikipedia.org/wiki/Sphaerocoryne_lefevrei)
+- “have long been used as a metaphor for women's beauty in Khmer and Thai literature.”, [Wikipedia: Sphaerocoryne lefevrei (cultural significance)](https://en.wikipedia.org/wiki/Sphaerocoryne_lefevrei)
+- “In 2005, the Kingdom of Cambodia designated seven flora and fauna as national symbols”, [Wikipedia: National symbols of Cambodia](https://en.wikipedia.org/wiki/National_symbols_of_Cambodia)
+
+**Documented visual characteristics**
+
+- Three outer and three inner petals.
+- The inner petals close in over the centre of the flower.
+- Cream-coloured, yellow or yellow-brown.
+- A metaphor for women's beauty in Khmer literature; Cambodia's national flower since 2005.
+
+**Adaptation notes**
+
+- Unlike every other motif here, this is not copied from a carving: it is drawn from the botanical description, then gilded and incised so it sits in the same family as the temple ornament.
+- Seen from the front: outer petals at 120° intervals, inner petals offset by 60° with their tips meeting at the centre as a closed dome. Petal proportions, the midribs and the gilt colouring are design choices; the source gives cream to yellow-brown.
+- Used only for the couple's own moments (between their names, the save-the-date seal, the knot of the blessing thread). The lotus rosette (KH-LOT-02) is kept wherever the ornament quotes temple carving or marks the rites.
+- Taxonomy is unsettled in the sources (some treat it as S. affinis); the decree's Mitrella mesnyi is reported as an illegitimate synonym. Only the common and Khmer names are shown to guests.
 
 ---
 

@@ -77,3 +77,15 @@
   background: rgb(255 255 255 / 0.25);
   margin: 0 var(--s-1);
 }
+
+/* Tile ↔ viewer morph (and photo-to-photo changes): a spring with no overshoot. */
+::view-transition-group(lightbox-photo) {
+  animation-duration: 460ms;
+  animation-timing-function: var(--ease-spring, var(--ease-ceremonial));
+}
+::view-transition-old(lightbox-photo),
+::view-transition-new(lightbox-photo) {
+  animation-duration: 300ms;
+  height: 100%;
+  object-fit: cover;
+}

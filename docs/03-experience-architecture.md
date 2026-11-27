@@ -54,10 +54,14 @@ docs/            01–04 phase deliverables · heritage-registry.md (generated)
 | Transition | Mechanism |
 |---|---|
 | Opening → invitation | Camera passes through the 3D doorway; ivory wash; the gate unmounts and Three.js is disposed. The SVG fallback scales the frame through. |
-| Section entrances | `Reveal` (rise / fade / scale / unveil / draw), staggered with `--i` |
+| Section entrances | `Reveal` (rise / fade / scale / unveil / draw / mask / image). Where `animation-timeline: view()` exists (Chrome, Safari 26+) each entrance is a keyframe animation on the element's own view timeline (`--rv`): it scrubs with the scroll, reverses on scroll-up, and completes within `--scrub-len` (26vh) of the element entering, so content on screen is never blank. Elsewhere (iOS 18 and older, Firefox) one shared IntersectionObserver adds `data-inview` and a 700 ms transition on `--ease-spring` plays once. Elements with an explicit `delay` (the hero), `timed`, or inside an `overflow: hidden/auto` box use the time path; sections should prefer `overflow: clip`. |
+| Entrance vocabulary | `rise` lifts 14px; `fade` is opacity only (body copy); `mask` raises each heading line out of its own window (0.4em of room below for coeng subscripts, open above for Moul's tall vowels; text is never split); `image` opens a photo from `inset(10% 8%)` while it settles from 1.12×; `draw` strokes ornaments along the scroll |
+| Choreography | `i` follows a gathering curve (0, 1, 1.82, 2.49 … steps; `choreo()` in `motion/tokens.ts`); `at` sets a hand-tuned offset. Section headers vary their rhythm (`procession` / `together` / `answer`): ornament first, together, or title first |
+| Motion tokens | `--ease-spring` is a critically damped spring as CSS `linear()` (no overshoot; falls back to `--ease-ceremonial`); `--ease-scrub` for scroll-linked entrances; `--d-reveal` 700 ms, `--d-draw` 1400 ms; `--d-hero` / `--d-hero-draw` keep the long durations for the hero and doorway |
+| Reduced motion | Nothing travels, clips or scrubs: time-path elements crossfade (280 ms), scroll-path elements are simply present, ornaments are drawn |
 | Layered parallax | `.parallax` with `--depth`, CSS `animation-timeline: view()` (no JS); static where unsupported |
 | Timeline spine | Scroll-driven `clip-path` growth |
-| Gallery → lightbox | Native `<dialog>`; photo changes use the View Transitions API where supported |
+| Gallery → lightbox | Native `<dialog>`. Shared-element View Transition: the tapped tile's photo takes `view-transition-name: lightbox-photo` and grows into the viewer, then shrinks back into its tile on close (if that tile is still on screen). Photo changes crossfade the same way. Without the API, or under reduced motion, it simply opens and closes |
 | Countdown digits | Keyed re-mount with a short settle animation |
 | Closing | Towers rise outer-first with staggered delays; a dawn glow fades in |
 
@@ -83,7 +87,7 @@ docs/            01–04 phase deliverables · heritage-registry.md (generated)
 | Doorway | Opening | Colonnette lathe (8 facets) + lintel relief extrusions + Banteay Srei superposed fronton (tube frames, extruded leaves, rosette; rear fronton set back in depth) | Assembles (fronton settles last), raking light, camera passes through; disposed after opening |
 | Lintel | Hero | Same lintel relief (`DoorwayScene` variant `lintel`) | Turns toward the pointer / with scroll; light drifts across the carving |
 | Temple | Closing | Redented-plan tier extrusions on the ogival envelope; lotus-petal lathe finials; tube + extruded-fan naga balustrades | Towers rise outer-first; camera orbits with scroll; dusk lighting |
-| CSS 3D | Photos, invitation card, films | `motion/Tilt3D` | Pointer tilt with specular sheen; scroll tilt on touch |
+| CSS 3D | Hero portrait only | `motion/Tilt3D` | Pointer tilt with specular sheen; scroll tilt on touch. Gallery tiles, films, the invitation card and portraits use the `image` reveal instead |
 
 `three/LazyScene` shows the SVG rendering first, loads WebGL only near the viewport, after the opening, on capable devices, and crossfades it in. `three/SceneHost` pauses offscreen and disposes on unmount.
 

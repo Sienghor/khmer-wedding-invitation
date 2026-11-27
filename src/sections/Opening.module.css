@@ -248,7 +248,7 @@
   font-style: italic;
   color: var(--c-ivory);
 }
-.guest:lang(km) {
+.guest[lang='km'] {
   font-family: var(--f-km-display);
   font-style: normal;
   font-size: var(--t-md);
@@ -328,6 +328,113 @@
 .gate[data-phase='leaving'][data-mode='svg'] .opening {
   opacity: 0;
   transition: opacity 0.4s var(--ease-exit);
+}
+
+/*
+ * Carried through the doorway (data-carry, set on tap when the browser can run a
+ * view transition): the title and greeting dissolve as before, but the names
+ * and date stay with the guest while the door passes by, taking on the hero's
+ * ink as the ivory wash rises behind them. App.tsx then captures this frame and
+ * the names glide into the hero title (Hero.module.css, same transition names).
+ */
+.gate[data-phase='leaving'][data-carry] .layout {
+  z-index: 1;
+  opacity: 1;
+}
+.gate[data-phase='leaving'][data-carry] .top,
+.gate[data-phase='leaving'][data-carry] .bottom,
+.gate[data-phase='leaving'][data-carry] .amp {
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-exit);
+}
+.gate[data-phase='leaving'][data-carry] .opening {
+  opacity: 1;
+}
+.gate[data-phase='leaving'][data-carry] .nameEn,
+.gate[data-phase='leaving'][data-carry] .nameKm,
+.gate[data-phase='leaving'][data-carry] .date {
+  text-shadow: 0 2px 18px rgb(0 0 0 / 0);
+  transition:
+    color 0.7s var(--ease-silk) 0.75s,
+    text-shadow 0.5s var(--ease-silk) 0.6s;
+}
+.gate[data-phase='leaving'][data-carry] .nameEn {
+  color: var(--c-ink);
+}
+.gate[data-phase='leaving'][data-carry] .nameKm {
+  color: var(--c-accent);
+}
+.gate[data-phase='leaving'][data-carry] .date {
+  color: var(--c-gold-ink);
+}
+/* SVG doorway: the frame still swells past the guest, the names inside it do
+   not (inverse scale), and the stone fades with the wash, which now sits below. */
+.gate[data-phase='leaving'][data-carry][data-mode='svg'] .opening {
+  transform: scale(0.625);
+  transition: transform 1.3s var(--ease-silk);
+}
+.gate[data-phase='leaving'][data-carry][data-mode='svg'] .svgDoor {
+  opacity: 0;
+  transition: opacity 0.7s var(--ease-silk) 0.75s;
+}
+:global(html[data-carry]) .gate .groomEn {
+  view-transition-name: kwi-groom-en;
+}
+:global(html[data-carry]) .gate .brideEn {
+  view-transition-name: kwi-bride-en;
+}
+:global(html[data-carry]) .gate .groomKm {
+  view-transition-name: kwi-groom-km;
+}
+:global(html[data-carry]) .gate .brideKm {
+  view-transition-name: kwi-bride-km;
+}
+:global(html[data-carry]) .gate .date {
+  view-transition-name: kwi-date;
+}
+
+
+/*
+ * A personalised greeting (?to=Name) catches the same raking light as the
+ * lintel, once, after it has settled. The name rests in pale gold so the light
+ * has somewhere to go. Overlay keeps the night ground almost untouched.
+ */
+.sweep {
+  position: relative;
+  justify-self: center;
+  color: color-mix(in oklab, var(--c-champagne) 55%, var(--c-ivory));
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* Starts after .bottom has finished its 1 s fade-in: a mid-transition parent
+     would isolate the blend against transparency. */
+  .gate[data-phase='ready'] .sweep::after {
+    content: '';
+    position: absolute;
+    inset: -0.1em -0.5em;
+    pointer-events: none;
+    background: linear-gradient(
+        102deg,
+        transparent 38%,
+        rgb(255 230 180 / 0.6) 46%,
+        rgb(255 248 230 / 1) 50%,
+        rgb(255 230 180 / 0.6) 54%,
+        transparent 62%
+      )
+      no-repeat;
+    background-size: 260% 100%;
+    background-position: 100% 0;
+    -webkit-mask-image: linear-gradient(transparent, #000 22%, #000 78%, transparent), linear-gradient(90deg, transparent, #000 0.6em, #000 calc(100% - 0.6em), transparent);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(transparent, #000 22%, #000 78%, transparent), linear-gradient(90deg, transparent, #000 0.6em, #000 calc(100% - 0.6em), transparent);
+    mask-composite: intersect;
+    mix-blend-mode: overlay;
+    animation: rake 1.4s var(--ease-silk) 1.1s both;
+  }
+}
+@keyframes rake {
+  to {
+    background-position: 0% 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

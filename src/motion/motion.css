@@ -1,58 +1,241 @@
 /*
  * MOTION SYSTEM
- * Entrances: opacity + transform only (GPU-composited, no layout shift).
- * All timing comes from tokens in styles/tokens.css.
+ * Only opacity, transform and clip-path move (GPU-composited, no layout shift).
+ * Timing comes from tokens in styles/tokens.css.
+ *
+ * Reveal.tsx stamps every [data-reveal] with data-reveal-mode:
+ *   scroll  view()-timeline keyframes, scrubbed by the scrollbar (section B)
+ *   time    once-only transitions on [data-inview] (section A)
+ * Offsets: --o is the choreographed step (from `i` or `at`), --delay is ms.
  */
-[data-reveal] {
-  opacity: 0;
-  transition:
-    opacity var(--d-reveal) var(--ease-ceremonial),
-    transform var(--d-reveal) var(--ease-ceremonial),
-    filter var(--d-reveal) var(--ease-ceremonial);
-  transition-delay: calc(var(--i, 0) * var(--stagger) + var(--delay, 0ms));
-}
 
-[data-reveal='rise'] {
-  transform: translate3d(0, 28px, 0);
-}
-
-[data-reveal='scale'] {
-  transform: scale(0.965);
-}
-
-/* The clip goes on the child: IntersectionObserver measures the clipped area,
-   so a fully clipped target would never report itself as visible. */
-[data-reveal='unveil'] {
-  opacity: 1;
-}
-[data-reveal='unveil'] > * {
-  clip-path: inset(0 0 100% 0);
-  transition: clip-path var(--d-reveal) var(--ease-ceremonial);
-  transition-delay: calc(var(--i, 0) * var(--stagger) + var(--delay, 0ms));
-}
-[data-reveal='unveil'][data-inview] > * {
-  clip-path: inset(0);
-}
-
-[data-reveal='draw'] {
-  opacity: 1;
-}
-
-[data-reveal][data-inview] {
-  opacity: 1;
-  transform: none;
+/* Mask lines must be boxes for transform to apply. */
+[data-reveal='mask'] > span {
+  display: block;
 }
 
 /* SVG stroke drawing: paths opt in with pathLength="1" and class="draw-path". */
 [data-reveal] .draw-path {
   stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  transition: stroke-dashoffset var(--d-draw) var(--ease-silk);
-  transition-delay: calc(var(--i, 0) * var(--stagger) + var(--delay, 0ms) + 200ms);
+  stroke-dashoffset: 0;
 }
 
-[data-reveal][data-inview] .draw-path {
+/* ───────────── A. Time path (IntersectionObserver) ───────────── */
+
+[data-reveal-mode='time'] {
+  --rv-delay: calc(var(--o, var(--i, 0)) * var(--stagger) + var(--delay, 0ms));
+  opacity: 0;
+  transition:
+    opacity calc(var(--d-reveal) * 0.8) var(--ease-ceremonial),
+    transform var(--d-reveal) var(--ease-spring, var(--ease-ceremonial));
+  transition-delay: var(--rv-delay);
+}
+[data-reveal-mode='time'][data-reveal='rise'] {
+  transform: translate3d(0, 14px, 0);
+}
+[data-reveal-mode='time'][data-reveal='scale'] {
+  transform: scale(0.97);
+}
+[data-reveal-mode='time'][data-inview] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Variants that keep their own box visible and move/clip children instead.
+   (IntersectionObserver measures the unclipped parent, so it always fires.) */
+[data-reveal-mode='time']:is([data-reveal='unveil'], [data-reveal='draw'], [data-reveal='mask'], [data-reveal='image']) {
+  opacity: 1;
+}
+
+[data-reveal-mode='time'][data-reveal='unveil'] > * {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path var(--d-reveal) var(--ease-spring, var(--ease-ceremonial)) var(--rv-delay);
+}
+[data-reveal-mode='time'][data-reveal='unveil'][data-inview] > * {
+  clip-path: inset(0);
+}
+
+/* Mask: each line rises out of a window that extends 0.4em below its box
+   (room for coeng subscripts and Moul's tall vowels; the top edge is open). */
+[data-reveal-mode='time'][data-reveal='mask'] > * {
+  transform: translate3d(0, calc(100% + 0.8em), 0);
+  clip-path: inset(-1em -1em calc(100% + 0.4em) -1em);
+  transition:
+    transform var(--d-reveal) var(--ease-spring, var(--ease-ceremonial)),
+    clip-path var(--d-reveal) var(--ease-spring, var(--ease-ceremonial));
+  transition-delay: calc(var(--rv-delay) + var(--line, 0) * 90ms);
+}
+[data-reveal-mode='time'][data-reveal='mask'][data-inview] > * {
+  transform: none;
+  clip-path: inset(-1em);
+}
+
+/* Image: the frame opens while the photograph settles (reverse Ken Burns). */
+[data-reveal-mode='time'][data-reveal='image'] > :first-child {
+  clip-path: inset(10% 8% round 18px);
+  transition:
+    clip-path var(--d-slow) var(--ease-spring, var(--ease-ceremonial)) var(--rv-delay),
+    scale var(--d-slow) var(--ease-spring, var(--ease-ceremonial));
+}
+[data-reveal-mode='time'][data-reveal='image'] > :first-child :is(img, video) {
+  transform: scale(1.12);
+  transition: transform calc(var(--d-slow) * 1.4) var(--ease-spring, var(--ease-ceremonial)) var(--rv-delay);
+}
+[data-reveal-mode='time'][data-reveal='image'] > :not(:first-child) {
+  opacity: 0;
+  transition: opacity var(--d-reveal) var(--ease-ceremonial) calc(var(--rv-delay) + 200ms);
+}
+[data-reveal-mode='time'][data-reveal='image'][data-inview] > :first-child {
+  clip-path: inset(0 round var(--r-md));
+}
+[data-reveal-mode='time'][data-reveal='image'][data-inview] > :first-child :is(img, video) {
+  transform: none;
+}
+[data-reveal-mode='time'][data-reveal='image'][data-inview] > :not(:first-child) {
+  opacity: 1;
+}
+
+[data-reveal-mode='time'] .draw-path {
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset var(--d-draw) var(--ease-silk);
+  transition-delay: calc(var(--rv-delay) + 150ms);
+}
+[data-reveal-mode='time'][data-inview] .draw-path {
   stroke-dashoffset: 0;
+}
+
+/* Lines of a mask reveal follow one another. */
+[data-reveal='mask'] > :nth-child(2) {
+  --line: 1;
+}
+[data-reveal='mask'] > :nth-child(3) {
+  --line: 2;
+}
+[data-reveal='mask'] > :nth-child(n + 4) {
+  --line: 3;
+}
+
+/* ───────────── B. Scroll path (view timelines) ─────────────
+   Ranges are measured in scroll distance from the moment the element's top
+   crosses the bottom of the viewport ("cover 0"), so every element completes
+   after the same --scrub-len of travel regardless of its height. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-reveal-mode='scroll'] {
+      view-timeline: --rv block;
+      --rv-from: calc(var(--o, var(--i, 0)) * var(--scrub-step));
+      --rv-to: calc(var(--rv-from) + var(--scrub-len));
+    }
+
+    [data-reveal-mode='scroll']:is([data-reveal='rise'], [data-reveal='fade'], [data-reveal='scale']),
+    [data-reveal-mode='scroll'][data-reveal='unveil'] > *,
+    [data-reveal-mode='scroll'][data-reveal='mask'] > *,
+    [data-reveal-mode='scroll'][data-reveal='image'] > *,
+    [data-reveal-mode='scroll'][data-reveal='image'] > :first-child :is(img, video),
+    [data-reveal-mode='scroll'] .draw-path {
+      animation-timing-function: var(--ease-scrub);
+      animation-fill-mode: both;
+      animation-timeline: --rv;
+      animation-range: cover var(--rv-from) cover var(--rv-to);
+    }
+
+    [data-reveal-mode='scroll'][data-reveal='rise'] {
+      animation-name: rv-rise;
+    }
+    [data-reveal-mode='scroll'][data-reveal='fade'] {
+      animation-name: rv-fade;
+    }
+    [data-reveal-mode='scroll'][data-reveal='scale'] {
+      animation-name: rv-scale;
+    }
+    [data-reveal-mode='scroll'][data-reveal='unveil'] > * {
+      animation-name: rv-unveil;
+    }
+    [data-reveal-mode='scroll'][data-reveal='mask'] > * {
+      animation-name: rv-mask;
+      animation-range: cover calc(var(--rv-from) + var(--line, 0) * var(--scrub-step))
+        cover calc(var(--rv-to) + var(--line, 0) * var(--scrub-step));
+    }
+    [data-reveal-mode='scroll'][data-reveal='image'] > :first-child {
+      animation-name: rv-image;
+      animation-range: cover var(--rv-from) cover calc(var(--rv-to) + 10vh);
+    }
+    [data-reveal-mode='scroll'][data-reveal='image'] > :first-child :is(img, video) {
+      animation-name: rv-settle;
+      animation-timing-function: linear;
+      animation-range: cover var(--rv-from) cover calc(var(--rv-to) + 24vh);
+    }
+    [data-reveal-mode='scroll'][data-reveal='image'] > :not(:first-child) {
+      animation-name: rv-fade;
+      animation-range: cover calc(var(--rv-from) + 8vh) cover calc(var(--rv-to) + 8vh);
+    }
+    /* Ornaments draw over a longer stretch, so the stroke visibly follows the thumb. */
+    [data-reveal-mode='scroll'] .draw-path {
+      animation-name: rv-draw;
+      animation-timing-function: var(--ease-silk);
+      animation-range: cover var(--rv-from) cover calc(var(--rv-from) + var(--draw-len, 40vh));
+    }
+  }
+}
+
+@keyframes rv-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+}
+@keyframes rv-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes rv-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+@keyframes rv-unveil {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+@keyframes rv-mask {
+  from {
+    transform: translate3d(0, calc(100% + 0.8em), 0);
+    clip-path: inset(-1em -1em calc(100% + 0.4em) -1em);
+  }
+  to {
+    transform: none;
+    clip-path: inset(-1em);
+  }
+}
+@keyframes rv-image {
+  from {
+    clip-path: inset(10% 8% round 18px);
+  }
+  to {
+    clip-path: inset(0 round var(--r-md));
+  }
+}
+@keyframes rv-settle {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes rv-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 /* Layered parallax via scroll-driven animations: zero JavaScript, off the main thread. */
@@ -75,14 +258,23 @@
   }
 }
 
+/* Reduced motion: nothing travels, clips or scrubs. Time-path elements get a
+   short opacity crossfade; scroll-path elements are simply there. Ornaments
+   are fully drawn. */
 @media (prefers-reduced-motion: reduce) {
   [data-reveal],
-  [data-reveal='unveil'] > * {
-    opacity: 1 !important;
+  :is([data-reveal='unveil'], [data-reveal='mask'], [data-reveal='image']) > *,
+  [data-reveal='image'] > :first-child :is(img, video) {
     transform: none !important;
     clip-path: none !important;
+    animation: none !important;
+  }
+  [data-reveal-mode='time'],
+  [data-reveal-mode='time']:is([data-reveal='unveil'], [data-reveal='mask'], [data-reveal='image']) > * {
+    transition: opacity 280ms linear !important;
   }
   [data-reveal] .draw-path {
-    stroke-dashoffset: 0;
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
   }
 }

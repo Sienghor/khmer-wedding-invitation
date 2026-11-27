@@ -25,12 +25,32 @@
   line-height: 1;
   font-variant-numeric: tabular-nums lining-nums;
   color: var(--c-gold-light);
-  animation: tick var(--d-base) var(--ease-ceremonial);
+  display: inline-flex;
 }
-@keyframes tick {
-  from {
-    opacity: 0.25;
-    transform: translateY(-0.18em);
+/* Each digit is a window onto a vertical reel of numerals (see Digit). */
+.digit {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+  /* Soft top/bottom edges so the rolling numerals pass under a lip. */
+  -webkit-mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+}
+.reel {
+  display: grid;
+  line-height: 1;
+  text-align: center;
+  transition: transform var(--d-base) var(--ease-spring, var(--ease-ceremonial));
+  will-change: transform;
+}
+.reel > span {
+  display: block;
+  height: 1em;
+  line-height: 1em;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reel {
+    transition: none;
   }
 }
 .label {
@@ -53,4 +73,48 @@
   display: grid;
   text-align: center;
   font-size: var(--t-lg);
+}
+
+/* Wedding days: counting down to the next rite. */
+.next {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  row-gap: clamp(0.8rem, 0.6rem + 1vw, 1.2rem);
+}
+.nextHead {
+  grid-column: 1 / -1;
+  display: grid;
+  justify-items: center;
+  gap: 0.15rem;
+  padding-inline: var(--s-3);
+  text-align: center;
+  line-height: 1.4;
+}
+.nextLabel {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
+  font-size: var(--t-sm);
+  color: var(--c-gold-light);
+}
+.nextLabel [lang='en'] {
+  font-family: var(--f-latin);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+.nextLabel [lang='en']::before {
+  content: '·';
+  margin-right: 0.45em;
+  letter-spacing: 0;
+}
+.nextKm {
+  font-family: var(--f-km-display);
+  font-size: var(--t-md);
+}
+.nextEn {
+  font-family: var(--f-latin);
+  font-style: italic;
+  font-size: var(--t-md);
+  opacity: 0.85;
 }

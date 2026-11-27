@@ -6,7 +6,7 @@
     radial-gradient(60% 40% at 15% 20%, rgb(213 183 122 / 0.22), transparent 70%),
     radial-gradient(50% 40% at 90% 70%, color-mix(in oklab, var(--c-sandstone) 28%, transparent), transparent 70%),
     linear-gradient(180deg, var(--c-accent-deep), var(--c-charcoal));
-  overflow: hidden;
+  overflow: clip; /* not hidden: a scroll container would stop scroll-linked reveals inside */
 }
 .inner {
   max-width: 600px;
@@ -86,7 +86,14 @@
   cursor: pointer;
   transition:
     background var(--d-quick) var(--ease-silk),
-    border-color var(--d-quick) var(--ease-silk);
+    border-color var(--d-quick) var(--ease-silk),
+    transform 380ms var(--ease-spring, var(--ease-ceremonial));
+}
+/* Tactile press: quick in, sprung release. */
+.chip:active {
+  transform: scale(0.94);
+  background: rgb(213 183 122 / 0.32);
+  transition-duration: 90ms;
 }
 .chip::before {
   content: '+ ';
@@ -127,6 +134,29 @@
 .submit:disabled {
   opacity: 0.7;
 }
+.submit {
+  position: relative;
+}
+/* Sending: the thread draws around the button instead of the button greying out. */
+.submit[data-busy] {
+  opacity: 1;
+  cursor: progress;
+  filter: saturate(0.85);
+}
+.btnThread {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+.btnThread path {
+  fill: none;
+  stroke: var(--c-gold-deep);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
 .error {
   color: #ffd1c7;
   font-size: var(--t-sm);
@@ -147,7 +177,13 @@
   gap: var(--s-3);
   text-align: center;
   padding: var(--s-5) 0;
-  animation: settle var(--d-slow) var(--ease-ceremonial);
+}
+/* The thanks rise in once the thread is tied. */
+.thanks > :not(.thread) {
+  animation: settle var(--d-slow) var(--ease-ceremonial) 1.45s both;
+}
+.thanks > .linkBtn {
+  animation-delay: 1.6s;
 }
 @keyframes settle {
   from {
@@ -221,4 +257,109 @@
   width: 1px;
   height: 1px;
   opacity: 0;
+}
+
+/* Sent: the form's contents fold away before the card closes to the thread. */
+.form[data-folding] > * {
+  animation: fold 300ms var(--ease-exit) forwards;
+}
+.form[data-folding] > .submit {
+  animation-delay: 160ms;
+}
+@keyframes fold {
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.985);
+  }
+}
+/* Back from the thanks view ("Send another"). */
+.form[data-returning] > * {
+  animation: settle var(--d-base) var(--ease-ceremonial) both;
+}
+
+/*
+ * THE TIED THREAD
+ * One antique-gold strand per blessing sent this session, wrapped around a
+ * lotus rosette (KH-LOT-02). Only the newest strand draws itself.
+ */
+.thread {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+}
+.threadSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.35));
+}
+.threadRosette {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14%;
+  translate: -50% -50%;
+  animation: rosette-in 500ms var(--ease-ceremonial) both;
+}
+.threadRosette svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+@keyframes rosette-in {
+  from {
+    opacity: 0;
+    scale: 0.85;
+  }
+}
+.strandBody,
+.strandSheen {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.strandBody {
+  stroke: var(--c-gold);
+  stroke-width: 2.8;
+}
+.strandSheen {
+  stroke: var(--c-gold-light);
+  stroke-width: 0.9;
+  opacity: 0.6;
+}
+.strand {
+  opacity: 0.8;
+}
+.strandNew path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: strand-draw 1400ms var(--ease-silk) 280ms forwards;
+}
+.strandNew .strandTail {
+  animation-duration: 360ms;
+  animation-delay: 1640ms;
+  animation-timing-function: var(--ease-ceremonial);
+}
+@keyframes strand-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thanks > :not(.thread),
+  .form[data-returning] > *,
+  .threadRosette {
+    animation: none;
+  }
+  .strandNew path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .chip,
+  .chip:active {
+    transform: none;
+  }
 }

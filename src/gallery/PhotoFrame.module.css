@@ -106,3 +106,8 @@
 .frame[data-state='loaded'] .skeleton::before {
   animation: none;
 }
+.frame[data-instant] .img {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
